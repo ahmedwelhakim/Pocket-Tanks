@@ -55,7 +55,7 @@
     <Compile Include="GameObjects\Fire.cs" />
     <Compile Include="GameObjects\GameObject.cs" />
     <Compile Include="GameObjects\Player.cs" />
-    <Compile Include="GameObjects\Region.cs" />
+    <Compile Include="Region.cs" />
     <Compile Include="GamePanel.cs">
       <SubType>Component</SubType>
     </Compile>
