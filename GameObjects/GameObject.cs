@@ -9,8 +9,8 @@ namespace Game.GameObjects
 {
     abstract class GameObject
     {
-        protected int X {get;set;}
-        protected int Y { get;set;}
+        protected float X {get;set;}
+        protected float Y { get;set;}
 
         public GameObject(int x,int y)
         {

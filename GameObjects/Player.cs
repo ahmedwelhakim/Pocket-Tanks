@@ -17,7 +17,7 @@ namespace Game.GameObjects
         }
         public override void Draw(Graphics g)
         {
-            g.DrawImage(player_img,new Point(X,Y));
+            g.DrawImage(player_img,new PointF(X,Y));
         }
     }
 }

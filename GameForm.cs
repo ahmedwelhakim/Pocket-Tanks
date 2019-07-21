@@ -13,14 +13,18 @@ namespace Game
     public partial class GameForm : Form
     {
         GamePanel gp;
+        public static int height;
+        public static int width;
         public GameForm()
         {
             InitializeComponent();
             gp = new GamePanel();
             Controls.Add(gp);
-
+            gp.StartGame();
+            height = this.Height;
+            width = this.Width;
         }
-
+        
        
     }
 }
