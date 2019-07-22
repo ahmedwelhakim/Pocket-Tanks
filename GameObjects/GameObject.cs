@@ -11,10 +11,12 @@ namespace Game.GameObjects
     {
         protected float X {get;set;}
         protected float Y { get;set;}
+        protected float Height { get; set; }
+        protected float Width { get; set; }
 
-        public GameObject(int x,int y)
+        public GameObject(float x,float y)
         {
-            this.X = X;
+            this.X = x;
             this.Y = y;
         }
         public abstract void Draw(Graphics g);

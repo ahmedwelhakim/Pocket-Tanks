@@ -9,46 +9,85 @@ namespace Game.GameObjects
 {
     class Fire : GameObject
     {
-        Image Fire_img;
+        Image fire_img;
         float gravity;
-        float gravity_speed;
-        bool isGravity;
-        public Fire(int x,int y) 
+        float speedY;
+        float speedX;
+        float friction;
+        float friction_coef;
+     
+        public Fire(float x,float y) 
             :base(x,y)
         {
-            Fire_img = Image.FromFile(@"Sprites\Fire.png");
-            gravity = 4;
-            gravity_speed = 0.5F;
-            isGravity = true;
+            fire_img = Image.FromFile(@"Sprites\Fire.png");
+            base.Height = fire_img.Height;
+            base.Width = fire_img.Width;
+            gravity = 2;
+            friction_coef = -0.3f;
+            friction = speedX * friction_coef;
         }
         public override void Draw(Graphics g)
         {
-            g.DrawImage(Fire_img, new PointF(X, Y));
+            g.DrawImage(fire_img, new PointF(X, Y));
         }
         public void Gravity(GamePanel gp)
         {
-            if (Y < gp.Height-Fire_img.Height)
+            if (Y < gp.Height-fire_img.Height)
             {
-                Y += gravity;
-                gravity += gravity_speed;
+                speedY += gravity;
+                if(Y+speedY> gp.Height - fire_img.Height)
+                {
+                    Y = gp.Height - fire_img.Height;
+                }
+            }
+            if (Y >= gp.Height - fire_img.Height)
+            {
+                speedY = 0;
+                speedX += friction;
+                friction = speedX * friction_coef;
+            }
+        }
+        public void Move()
+        {
+            X += speedX;
+            Y += speedY;
+        }
+
+        /// <summary>
+        /// This method take the angle in degree and the power to shoot the fire
+        /// </summary>
+        /// <param name="angle">Angle in degree</param>
+        /// <param name="power">Power ranging from 0 to 100</param>
+        public void ShootFire(int angle,Power power)
+        {
+            float speedMagnitude = power.getSpeedMagnitude();
+            double rad_angle = angle * (Math.PI / 180.0);
+            speedY = (float)(-speedMagnitude * Math.Sin(rad_angle));
+            speedX = (float)(speedMagnitude * Math.Cos(rad_angle));
+        }
+    }
+    class Power
+    {
+        protected double Power_Val { get; set; }
+        private const float speed_val=40;
+        public Power(double pow)
+        {
+            if (pow > 100)
+            {
+                this.Power_Val = 100;
+            }
+            else if (pow < 0)
+            {
+                this.Power_Val = 0;
             }
             else
             {
-                isGravity = false;
-            }
-            if(Y> gp.Height - Fire_img.Height)
-            {
-                Y = gp.Height - Fire_img.Height;
-                isGravity = false;
+                this.Power_Val = pow;
             }
         }
-        public void move()
+        public float getSpeedMagnitude()
         {
-            if (isGravity)
-            {
-                X += 10;
-                Y -= 10;
-            }
+            return (float)((Power_Val / 100) * speed_val);
         }
     }
 }

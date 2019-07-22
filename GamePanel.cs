@@ -24,8 +24,11 @@ namespace Game
             gameTimer = new Timer();
             gameTimer.Interval = 20;
             gameTimer.Tick += GameTimer_Tick;
-            player = new Player(50, 50);
-            fire = new Fire(70, 70);;
+            player = new Player(0, this.Height - Player.Height_Player);
+            fire = new Fire(100, 260);
+
+            //Adding the angle and power to shoot
+            fire.ShootFire(60,new Power(80));
             gameTimer.Start();
         }
         public void EndGame()
@@ -41,7 +44,7 @@ namespace Game
         private void updateGame()
         {
             fire.Gravity(this);
-            fire.move();
+            fire.Move();  
         }
 
         public void DrawGame(Graphics g)

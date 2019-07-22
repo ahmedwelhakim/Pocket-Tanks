@@ -9,11 +9,15 @@ namespace Game.GameObjects
 {
     class Player : GameObject
     {
-        Image player_img;
-        public Player(int x,int y)
+        static Image player_img = Image.FromFile(@"Sprites\Player.png");
+        public static float Width_Player=player_img.Width;
+        public static float Height_Player = player_img.Height;
+        public Player(float x,float y)
             :base(x,y)
         {
-            player_img = Image.FromFile(@"Sprites\Player.png");
+            
+            base.Height = player_img.Height;
+            base.Width = player_img.Width;
         }
         public override void Draw(Graphics g)
         {
