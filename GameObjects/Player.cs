@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PocketTanks
+namespace Game.GameObjects
 {
-    class player : GameObject
+    class Player : GameObject
     {
         private static int score = 0; //each tank starts with a score of zero
         private static int moves = 5;  //each tank starts a new game with 5 available moves 
@@ -15,7 +15,7 @@ namespace PocketTanks
         public static float Width_Player = Player_Image.Width;
         public static float Height_Player = Player_Image.Height;        
 
-        public player(float x,float y):base(x,y)
+        public Player(float x,float y):base(x,y)
         {
             base.Height = Player_Image.Height;
             base.Width = Player_Image.Width;
@@ -39,7 +39,7 @@ namespace PocketTanks
             }
         }   
         
-        public int get_Remaining_Moves(player p)
+        public int get_Remaining_Moves(Player p)
         {
             return moves;
         }
