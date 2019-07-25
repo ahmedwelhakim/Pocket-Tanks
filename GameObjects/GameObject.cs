@@ -13,7 +13,6 @@ namespace Game.GameObjects
         protected float Y { get;set;}
         protected float Height { get; set; }
         protected float Width { get; set; }
-
         public GameObject(float x,float y)
         {
             this.X = x;
