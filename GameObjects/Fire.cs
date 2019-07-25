@@ -65,6 +65,11 @@ namespace Game.GameObjects
             speedY = (float)(-speedMagnitude * Math.Sin(rad_angle));
             speedX = (float)(speedMagnitude * Math.Cos(rad_angle));
         }
+
+        public bool isColliding(Player p)
+        {
+            return (((this.Y-p.Y)<=p.Height )&& ((this.X - p.X) <= p.Width));
+        }
     }
     class Power
     {
