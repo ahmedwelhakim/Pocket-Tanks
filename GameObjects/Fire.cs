@@ -15,6 +15,7 @@ namespace Game.GameObjects
         float speedX;
         float friction;
         float friction_coef;
+
      
         public Fire(float x,float y) 
             :base(x,y)
@@ -74,14 +75,13 @@ namespace Game.GameObjects
         public override string ToString()
         {
             return ("SpeedX= "+ speedX + " ----- SpeedY= "+ speedY + "\n" +
-                "X: "+ X + "  ----- Y: "+ Y + "\n" +
-                "Gravity: "+gravity);
+                "BallX: "+ X + "  ----- BallY: "+ Y );
         }
     }
     class Power
     {
         protected double Power_Val { get; }
-        private const float speed_val=43;
+        private const float speed_val=50;
         public Power(double pow)
         {
             if (pow > 100)
@@ -100,6 +100,10 @@ namespace Game.GameObjects
         public float getSpeedMagnitude()
         {
             return (float)((Power_Val / 100) * speed_val);
+        }
+        public double getPower_Val()
+        {
+            return Power_Val;
         }
         public override string ToString()
         {

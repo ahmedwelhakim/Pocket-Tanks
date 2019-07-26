@@ -20,7 +20,5 @@ namespace Game
             Controls.Add(gp);
             gp.StartGame();
         }
-
-        
     }
 }
