@@ -45,9 +45,9 @@ namespace Game.GameObjects
                 Console.WriteLine("Angele: {0}     Power: {1}", angle, power);
                 MouseManager.is_Left_Btn_Released = false;
                 Console.WriteLine(fire);
-
+                Console.WriteLine("------------------------------------");
                 gp.Controls.Remove(lbl);
-                //  turn = false;
+                //turn = false;
             }
         }
         public void Update()
