@@ -72,10 +72,16 @@ namespace Game.GameObjects
             speedY = (float)(-speedMagnitude * Math.Sin(rad_angle));
             speedX = (float)(speedMagnitude * Math.Cos(rad_angle));
         }
+
         public override string ToString()
         {
             return ("SpeedX= "+ speedX + " ----- SpeedY= "+ speedY + "\n" +
                 "BallX: "+ X + "  ----- BallY: "+ Y );
+
+        }
+        public bool isColliding(Player p)
+        {
+            return (((this.Y-p.Y)<=p.Height )&& ((this.X - p.X) <= p.Width));
         }
     }
     class Power
