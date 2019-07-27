@@ -14,6 +14,7 @@ namespace Game.GameObjects
         public float Height { get; set; }
         public float Width { get; set; }
 
+
         public GameObject(float x,float y)
         {
             this.X = x;
