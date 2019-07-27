@@ -9,10 +9,12 @@ namespace Game.GameObjects
 {
     abstract class GameObject
     {
-        protected float X {get;set;}
-        protected float Y { get;set;}
-        protected float Height { get; set; }
-        protected float Width { get; set; }
+        public float X {get;set;}
+        public float Y { get;set;}
+        public float Height { get; set; }
+        public float Width { get; set; }
+
+
         public GameObject(float x,float y)
         {
             this.X = x;
