@@ -29,6 +29,7 @@ namespace Game
             Controls.Add(gp);
             gp.StartGame();
         }
+<<<<<<< HEAD
 
         public GameForm(int myPortNumber,GamePanel gp)         //Host Constructor
         {
@@ -84,5 +85,7 @@ namespace Game
             }
         }
 
+=======
+>>>>>>> 4e931aed645e329ce9fe5755ad3f4a65a5f0f8de
     }
 }

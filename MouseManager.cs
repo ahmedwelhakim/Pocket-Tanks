@@ -11,7 +11,7 @@ namespace Game
     {
         public static int X { get; set; }
         public static int Y { get; set; }
-        public static bool is_Left_Btn_Released { get; set; }
+        public static bool is_Left_Btn_Released { get; set;}
         static Dictionary<MouseButtons, bool> mouse_btns = new Dictionary<MouseButtons, bool>();
         public static void setMouseState(MouseButtons m,bool state)
         {

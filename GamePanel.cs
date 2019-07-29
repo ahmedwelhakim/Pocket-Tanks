@@ -11,10 +11,7 @@ namespace Game
     public class GamePanel : Panel
     {
         Player player;
-        //Fire fire;
         Timer gameTimer;
-
-
         public GamePanel()
         {
             
@@ -25,12 +22,9 @@ namespace Game
         }
         private void GameForm_MouseDown(object sender, MouseEventArgs e)
         {
-            //Console.WriteLine("mouse X: {0}    mouse Y: {1}", e.X, e.Y);
-            //Console.WriteLine("cursor X: {0}   cursor Y: {1}",PointToClient(Cursor.Position).X, PointToClient(Cursor.Position).Y);
             MouseManager.X = Cursor.Position.X;
             MouseManager.Y = Cursor.Position.Y;
             MouseManager.setMouseState(e.Button, true);
-            
         }
         private void GameForm_MouseUp(object sender, MouseEventArgs e)
         {
@@ -47,12 +41,6 @@ namespace Game
             gameTimer.Tick += GameTimer_Tick;
             player = new Player(50, this.Height - Player.Height_Player,this);
             player.Start_Turn();
-            
-           // fire = new Fire(100, 260);
-            //Adding the angle and power to shoot
-
-           // fire.ShootFire(60, new Power(80));
-
             gameTimer.Start();
         }
         public void EndGame()
@@ -64,23 +52,13 @@ namespace Game
             updateGame();       
             Invalidate();
         }
-
         private void updateGame()
         {
-
-
-               // fire.Update(this);
-                
-
             player.Update();
-           
         }
-
         public void DrawGame(Graphics g)
         {
             player.Draw(g);
-          //  fire.Draw(g);
-
         }
         protected override void OnPaint(PaintEventArgs e)
         {

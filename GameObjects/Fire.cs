@@ -46,7 +46,11 @@ namespace Game.GameObjects
         float speedX;
         float friction;
         float friction_coef;
+<<<<<<< HEAD
         Thread thread;
+=======
+
+>>>>>>> 4e931aed645e329ce9fe5755ad3f4a65a5f0f8de
      
         public Fire(float x,float y) 
             :base(x,y)
@@ -106,11 +110,16 @@ namespace Game.GameObjects
             speedY = (float)(-speedMagnitude * Math.Sin(rad_angle));
             speedX = (float)(speedMagnitude * Math.Cos(rad_angle));
         }
+
         public override string ToString()
         {
             return ("SpeedX= "+ speedX + " ----- SpeedY= "+ speedY + "\n" +
-                "X: "+ X + "  ----- Y: "+ Y + "\n" +
-                "Gravity: "+gravity);
+                "BallX: "+ X + "  ----- BallY: "+ Y );
+
+        }
+        public bool isColliding(Player p)
+        {
+            return (((this.Y-p.Y)<=p.Height )&& ((this.X - p.X) <= p.Width));
         }
         public void animate()       //To be put on colliding
         {
@@ -121,7 +130,7 @@ namespace Game.GameObjects
     class Power
     {
         protected double Power_Val { get; }
-        private const float speed_val=43;
+        private const float speed_val=50;
         public Power(double pow)
         {
             if (pow > 100)
@@ -140,6 +149,10 @@ namespace Game.GameObjects
         public float getSpeedMagnitude()
         {
             return (float)((Power_Val / 100) * speed_val);
+        }
+        public double getPower_Val()
+        {
+            return Power_Val;
         }
         public override string ToString()
         {
