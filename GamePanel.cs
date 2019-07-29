@@ -12,6 +12,7 @@ namespace Game
     {
         Player player;
         Timer gameTimer;
+        double frame_no=1;
         public GamePanel()
         {
             this.DoubleBuffered = true;
@@ -21,8 +22,8 @@ namespace Game
         }
         private void GameForm_MouseDown(object sender, MouseEventArgs e)
         {
-            MouseManager.X = Cursor.Position.X;
-            MouseManager.Y = Cursor.Position.Y;
+            MouseManager.X = PointToClient(Cursor.Position).X;
+            MouseManager.Y = PointToClient(Cursor.Position).Y;
             MouseManager.setMouseState(e.Button, true);
         }
         private void GameForm_MouseUp(object sender, MouseEventArgs e)
@@ -54,6 +55,16 @@ namespace Game
         private void updateGame()
         {
             player.Update();
+            
+
+            if (frame_no + 1 > 10000000000)
+            {
+                frame_no = 1;
+            }
+            else
+            {
+                frame_no++;
+            }
         }
         public void DrawGame(Graphics g)
         {

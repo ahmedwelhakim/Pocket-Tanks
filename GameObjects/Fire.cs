@@ -15,7 +15,7 @@ namespace Game.GameObjects
         float speedX;
         float friction;
         float friction_coef;
-
+        public double Fire_Radius { get; }
      
         public Fire(float x,float y) 
             :base(x,y)
@@ -26,6 +26,7 @@ namespace Game.GameObjects
             gravity = 2;
             //friction_coef = -0.3f;
             //friction = speedX * friction_coef;
+            Fire_Radius = fire_img.Width / 2;
         }
         public override void Draw(Graphics g)
         {
