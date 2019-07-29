@@ -4,17 +4,49 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
+using System.Threading;
 
 namespace Game.GameObjects
 {
+    class ThreadHelper
+    {
+        System.Windows.Forms.Timer timer;
+        private Fire fire;
+        private int i = 1;
+        public ThreadHelper(Fire fire)
+        {
+            this.fire = fire;
+        }
+        public void ThreadHandling()
+        {
+            timer = new System.Windows.Forms.Timer();
+            timer.Interval = 20;
+            timer.Tick += Timer_Tick1;
+            timer.Start();
+            
+        }
+
+        private void Timer_Tick1(object sender, EventArgs e)
+        {
+            fire.fire_img = Image.FromFile(@"ResourcesNew\explosions\small_explosion\explosion" + i + ".png");
+            i++;
+            if (i > 31)
+            {
+                timer.Stop();
+            }
+        }
+    }
     class Fire : GameObject
     {
-        Image fire_img;
+        GamePanel gg;
+        public Image fire_img;
         float gravity;
         float speedY;
         float speedX;
         float friction;
         float friction_coef;
+        Thread thread;
      
         public Fire(float x,float y) 
             :base(x,y)
@@ -38,6 +70,7 @@ namespace Game.GameObjects
                 if(Y+speedY> gp.Height - fire_img.Height)
                 {
                     Y = gp.Height - fire_img.Height;
+                   // animate();
                 }
             }
             if (Y > gp.Height - fire_img.Height)
@@ -45,6 +78,7 @@ namespace Game.GameObjects
                 speedY = 0;
                 speedX = 0;
                 Y = gp.Height - fire_img.Height;
+                
                // friction = speedX * friction_coef;
             }
         }
@@ -52,6 +86,7 @@ namespace Game.GameObjects
         {
             X += speedX;
             Y += speedY;
+            
         }
         
         public void Update(GamePanel gp)
@@ -76,6 +111,11 @@ namespace Game.GameObjects
             return ("SpeedX= "+ speedX + " ----- SpeedY= "+ speedY + "\n" +
                 "X: "+ X + "  ----- Y: "+ Y + "\n" +
                 "Gravity: "+gravity);
+        }
+        public void animate()       //To be put on colliding
+        {
+            ThreadHelper th = new ThreadHelper(this);
+            th.ThreadHandling();
         }
     }
     class Power

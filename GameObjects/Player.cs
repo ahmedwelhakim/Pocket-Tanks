@@ -17,11 +17,11 @@ namespace Game.GameObjects
         public  GamePanel gp;
 
         private Fire fire;
-        protected int angle; //angle of the shooted fire
-        protected Power power;//power of shooted fire
+        public int angle; //angle of the shooted fire
+        public Power power;//power of shooted fire
         private bool turn = false;//the turn of this player to decide wether to shoot or not
-        private bool fired = false;
-
+        public bool fired = false;
+        
         public Player(float x,float y,GamePanel gp):base(x,y)
         {
             base.Height = Player_Image.Height;
@@ -50,6 +50,7 @@ namespace Game.GameObjects
                 MouseManager.is_Left_Btn_Released = false;
                 Console.WriteLine(fire);
                 turn = false;
+                
             }
            
         }
@@ -118,6 +119,10 @@ namespace Game.GameObjects
             {
                 fire.Draw(g);
             }
+        }
+        public String getAngleAndPower()
+        {
+            return (angle + " " + power.ToString());
         }
     }
 }

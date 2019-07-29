@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 namespace Game
 {
-    class GamePanel : Panel
+    public class GamePanel : Panel
     {
         Player player;
         //Fire fire;
@@ -17,6 +17,7 @@ namespace Game
 
         public GamePanel()
         {
+            
             this.DoubleBuffered = true;
             this.Dock = DockStyle.Fill;
             this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.GameForm_MouseDown);

@@ -18,7 +18,7 @@ namespace Game
             Application.SetCompatibleTextRenderingDefault(false);
             GameForm gf = new GameForm();
             Console.WriteLine(gf.Height  ); 
-            Application.Run(new GameForm());
+            Application.Run(gf);
         }
     }
 }
