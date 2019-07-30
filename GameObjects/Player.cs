@@ -40,7 +40,7 @@ namespace Game.GameObjects
             turn = true;
             fired = false;
             MouseManager.is_Left_Btn_Released = false;
-            fire = new Fire((X + (Width_Player / 2)-19), Y-10);
+            fire = new Fire((X + (Width_Player / 2)-19), Y-10,FireType.Cutter);
             Console.WriteLine("Turn Started");
         }
         public void End_Turn()
@@ -63,10 +63,10 @@ namespace Game.GameObjects
                 Console.WriteLine(fire);
                 Console.WriteLine("------------------------------------");
                 gp.Controls.Remove(lbl);
-                //turn = false;
+                turn = false;
             }
         }
-        public void Update()
+        public void Update( double frame_no)
         {
             if(MouseManager.getMouseState(MouseButtons.Left) && turn)
             {
@@ -81,7 +81,11 @@ namespace Game.GameObjects
             Shoot();
             if (fire!=null&& fired)
             {
-                fire.Update(gp);
+                fire.Update(gp, frame_no);
+                if(fire.isFinished)
+                {
+                    fire = null;
+                }
             }
         }
         private void Calc_Angle_Power()

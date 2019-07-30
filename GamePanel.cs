@@ -37,7 +37,7 @@ namespace Game
         public void StartGame()
         {
             gameTimer = new Timer();
-            gameTimer.Interval = 20;
+            gameTimer.Interval = 30;
             gameTimer.Tick += GameTimer_Tick;
             player = new Player(50, this.Height - Player.Height_Player,this);
             player.Start_Turn();
@@ -54,7 +54,7 @@ namespace Game
         }
         private void updateGame()
         {
-            player.Update();
+            player.Update(frame_no);
             
 
             if (frame_no + 1 > 10000000000)
