@@ -13,6 +13,7 @@ namespace Game
         Player player;
         Timer gameTimer;
         double frame_no=1;
+        BricksBuilder br_build;
         public GamePanel()
         {
             this.DoubleBuffered = true;
@@ -39,9 +40,10 @@ namespace Game
             gameTimer = new Timer();
             gameTimer.Interval = 30;
             gameTimer.Tick += GameTimer_Tick;
-            player = new Player(50, this.Height - Player.Height_Player,this);
-            player.Start_Turn();
             gameTimer.Start();
+            br_build = new BricksBuilder(this,2);
+            player = new Player(50, br_build.Beginnig_Y - Player.Height_Player, this);
+            player.Start_Turn();
         }
         public void EndGame()
         {
@@ -68,6 +70,7 @@ namespace Game
         }
         public void DrawGame(Graphics g)
         {
+            br_build.draw(g);
             player.Draw(g);
         }
         protected override void OnPaint(PaintEventArgs e)

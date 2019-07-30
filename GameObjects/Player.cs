@@ -21,7 +21,7 @@ namespace Game.GameObjects
         Pen dashed_pen;
 
         private Fire fire;
-        protected int angle; //angle of the shooted fire
+        protected int angle=60; //angle of the shooted fire
         protected Power power;//power of shooted fire
         private bool turn = false;//the turn of this player to decide wether to shoot or not
         private bool fired = false;
@@ -32,7 +32,7 @@ namespace Game.GameObjects
             base.Width = Player_Image.Width;
             this.gp = gp;
             pen = new Pen(Color.FromArgb(80,68,22), 5);
-            dashed_pen = new Pen(Color.SandyBrown, 2);
+            dashed_pen = new Pen(Color.SandyBrown, 2.7f);
             dashed_pen.DashStyle = DashStyle.Dot;
         }
         public void Start_Turn()
@@ -82,11 +82,17 @@ namespace Game.GameObjects
             if (fire!=null&& fired)
             {
                 fire.Update(gp, frame_no);
-                if(fire.isFinished)
+                if (fire.Y > (this.Y+Height/2))
+                {
+                    fire.Y = this.Y+Height/2 ;
+                    fire.Explode();
+                }
+                if (fire.isFinished)
                 {
                     fire = null;
                 }
             }
+           
         }
         private void Calc_Angle_Power()
         {

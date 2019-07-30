@@ -17,7 +17,7 @@ namespace Game.GameObjects
         float friction;
         float friction_coef;
         int img_indx;
-        bool isCollided;
+        public bool IsCollided { get; set; }
         public bool isFinished=false;
 
         Explosion explosion;
@@ -40,11 +40,11 @@ namespace Game.GameObjects
         }
         public override void Draw(Graphics g)
         {
-            if (!isCollided)
+            if (!IsCollided)
             {
                 g.DrawImage(Drawed_img, new PointF(X, Y));
             }
-            if(explosion!=null && isCollided)
+            if(explosion!=null && IsCollided)
             {
                 explosion.Draw(g);
             }
@@ -64,11 +64,7 @@ namespace Game.GameObjects
                 speedY = 0;
                 speedX = 0;
                 Y = gp.Height - Drawed_img.Height;
-                if(!isCollided)
-                {
-                    explosion = new Explosion(X, Y+5, ExplosionType.small);
-                }
-                isCollided = true;
+                Explode();
                
                // friction = speedX * friction_coef;
             }
@@ -78,7 +74,14 @@ namespace Game.GameObjects
             X += speedX;
             Y += speedY;
         }
-        
+        public void Explode()
+        {
+            if (!IsCollided)
+            {
+                explosion = new Explosion(X, Y + 5, ExplosionType.small);
+            }
+            IsCollided = true;
+        }
         public void Update(GamePanel gp,double frame_no)
         {
             this.Move();
@@ -96,7 +99,7 @@ namespace Game.GameObjects
                 Drawed_img = imgs[img_indx];
             }
 
-            if (explosion != null && isCollided)
+            if (explosion != null && IsCollided)
             {
                 explosion.StartExplosion(frame_no);
                 if (explosion.isFinished == true)
