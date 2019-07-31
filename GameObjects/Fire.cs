@@ -22,20 +22,20 @@ namespace Game.GameObjects
         {
             timer = new System.Windows.Forms.Timer();
             timer.Interval = 20;
-            timer.Tick += Timer_Tick1;
+        //    timer.Tick += Timer_Tick1;
             timer.Start();
 
         }
 
-        private void Timer_Tick1(object sender, EventArgs e)
-        {
-            fire.fire_img = Image.FromFile(@"ResourcesNew\explosions\small_explosion\explosion" + i + ".png");
-            i++;
-            if (i > 31)
-            {
-                timer.Stop();
-            }
-        }
+        //private void Timer_Tick1(object sender, EventArgs e)
+        //{
+        //    fire.fire_img = Image.FromFile(@"ResourcesNew\explosions\small_explosion\explosion" + i + ".png");
+        //    i++;
+        //    if (i > 31)
+        //    {
+        //        timer.Stop();
+        //    }
+        //}
     }
     class Fire : GameObject
     {
