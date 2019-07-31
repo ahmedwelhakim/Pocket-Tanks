@@ -24,7 +24,7 @@ namespace Game.GameObjects
             timer.Interval = 20;
             timer.Tick += Timer_Tick1;
             timer.Start();
-            
+
         }
 
         private void Timer_Tick1(object sender, EventArgs e)
@@ -39,69 +39,119 @@ namespace Game.GameObjects
     }
     class Fire : GameObject
     {
-        GamePanel gg;
-        public Image fire_img;
+        Image Drawed_img;
+        List<Image> imgs;
         float gravity;
         float speedY;
         float speedX;
         float friction;
         float friction_coef;
-
+        int img_indx;
+        FireType fireType;
+        public bool IsCollided { get; set; }
+        public bool isFinished = false;
+        Explosion explosion;
+        public double Fire_Radius { get; }
         Thread thread;
-
-     
-        public Fire(float x,float y) 
-            :base(x,y)
+        public Fire(float x, float y, FireType fireType)
+            : base(x, y)
         {
-            fire_img = Image.FromFile(@"Sprites\Fire.png");
-            base.Height = fire_img.Height;
-            base.Width = fire_img.Width;
-            gravity = 2;
+            Fire_Img fim = new Fire_Img(fireType);
+            imgs = fim.get_fire_imgs();
+            Drawed_img = imgs[0];
+            base.Height = Drawed_img.Height;
+            base.Width = Drawed_img.Width;
+            gravity = 1;
             //friction_coef = -0.3f;
             //friction = speedX * friction_coef;
+            Fire_Radius = Drawed_img.Width / 2;
+            img_indx = 0;
+            this.fireType = fireType;
         }
         public override void Draw(Graphics g)
         {
-            g.DrawImage(fire_img, new PointF(X, Y));
+            if (!IsCollided)
+            {
+                g.DrawImage(Drawed_img, new PointF(X, Y));
+            }
+            if (explosion != null && IsCollided)
+            {
+                explosion.Draw(g);
+            }
         }
-        private void Gravity(GamePanel gp)
+        private void Gravity(float ground_Y)
         {
-            if (Y <= gp.Height-fire_img.Height)
+            if (Y < ground_Y - Drawed_img.Height)
             {
                 speedY += gravity;
-                if(Y+speedY> gp.Height - fire_img.Height)
+                if (Y + speedY > ground_Y - Drawed_img.Height)
                 {
-                    Y = gp.Height - fire_img.Height;
-                   // animate();
+                    Y = ground_Y - this.Height;
                 }
             }
-            if (Y > gp.Height - fire_img.Height)
+            if (Y >= ground_Y - this.Height)
             {
                 speedY = 0;
                 speedX = 0;
-                Y = gp.Height - fire_img.Height;
-                
-               // friction = speedX * friction_coef;
+                Y = ground_Y - this.Height;
+                Explode(Y);
             }
         }
         private void Move()
         {
             X += speedX;
             Y += speedY;
-            
+
         }
-        
-        public void Update(GamePanel gp)
+        public void Explode(float y)
+        {
+            if (!IsCollided)
+            {
+                if (fireType == FireType.Cutter)
+                {
+                    explosion = new Explosion(X, y + 10, ExplosionType.nuke);
+                }
+                else
+                {
+                    explosion = new Explosion(X, y + 5, ExplosionType.small);
+                }
+
+            }
+            IsCollided = true;
+        }
+        public void Update(float ground_Y, double frame_no)
         {
             this.Move();
-            this.Gravity(gp);
+            this.Gravity(ground_Y);
+            if (frame_no % 2 == 0)
+            {
+                if (img_indx < imgs.Count - 1)
+                {
+                    img_indx++;
+                }
+                else
+                {
+                    img_indx = 0;
+                }
+                Drawed_img = imgs[img_indx];
+            }
+
+            if (explosion != null && IsCollided)
+            {
+                explosion.StartExplosion(frame_no);
+                if (explosion.isFinished == true)
+                {
+                    explosion = null;
+                    isFinished = true;
+                }
+            }
         }
         /// <summary>
         /// This method take the angle in degree and the power to shoot the fire
         /// </summary>
         /// <param name="angle">Angle in degree</param>
         /// <param name="power">Power ranging from 0 to 100</param>
-        public void ShootFire(int angle,Power power)
+        public void ShootFire(int angle, Power power)
         {
             float speedMagnitude = power.getSpeedMagnitude();
             double rad_angle = angle * (Math.PI / 180.0);
@@ -111,13 +161,13 @@ namespace Game.GameObjects
 
         public override string ToString()
         {
-            return ("SpeedX= "+ speedX + " ----- SpeedY= "+ speedY + "\n" +
-                "BallX: "+ X + "  ----- BallY: "+ Y );
+            return ("SpeedX= " + speedX + " ----- SpeedY= " + speedY + "\n" +
+                "BallX: " + X + "  ----- BallY: " + Y);
 
         }
         public bool isColliding(Player p)
         {
-            return (((this.Y-p.Y)<=p.Height )&& ((this.X - p.X) <= p.Width));
+            return (((this.Y - p.Y) <= p.Height) && ((this.X - p.X) <= p.Width));
         }
         public void animate()       //To be put on colliding
         {
@@ -128,7 +178,7 @@ namespace Game.GameObjects
     class Power
     {
         protected double Power_Val { get; }
-        private const float speed_val=50;
+        private const float speed_val = 37;
         public Power(double pow)
         {
             if (pow > 100)
@@ -154,7 +204,40 @@ namespace Game.GameObjects
         }
         public override string ToString()
         {
-            return (""+Power_Val);
+            return ("" + Power_Val);
         }
     }
+    enum FireType
+    {
+        Cutter, Single_Shot
+    }
+    class Fire_Img
+    {
+        private List<Image> imgs = new List<Image>();
+        public Fire_Img(FireType fireType)
+        {
+            if (fireType == FireType.Cutter)
+            {
+                for (int i = 0; i < 4; i++)
+                {
+                    int n = i + 1;
+                    imgs.Add(Image.FromFile(@"resourcesnew/weapons/cutter/cutter" + n + ".png"));
+                }
+            }
+            else if (fireType == FireType.Single_Shot)
+            {
+                for (int i = 0; i < 3; i++)
+                {
+                    int n = i + 1;
+                    imgs.Add(Image.FromFile(@"resourcesnew/weapons/single_shot/single_shot_" + n + ".png"));
+                }
+            }
+        }
+        public List<Image> get_fire_imgs()
+        {
+            return imgs;
+        }
+    }
+
+
 }

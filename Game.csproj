@@ -57,6 +57,8 @@
     <Compile Include="GameForm.Designer.cs">
       <DependentUpon>GameForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="GameObjects\Brick.cs" />
+    <Compile Include="GameObjects\Explosion.cs" />
     <Compile Include="GameObjects\Fire.cs" />
     <Compile Include="GameObjects\GameObject.cs" />
     <Compile Include="GameObjects\Player.cs" />
@@ -95,6 +97,7 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <None Include="bin\Debug\resourcesnew\background\bg.png" />
     <Content Include="Sprites\Fire.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

@@ -12,6 +12,8 @@ namespace Game
     {
         Player player;
         Timer gameTimer;
+        double frame_no=1;
+        BricksBuilder br_build;
         public GamePanel()
         {
             
@@ -22,8 +24,8 @@ namespace Game
         }
         private void GameForm_MouseDown(object sender, MouseEventArgs e)
         {
-            MouseManager.X = Cursor.Position.X;
-            MouseManager.Y = Cursor.Position.Y;
+            MouseManager.X = PointToClient(Cursor.Position).X;
+            MouseManager.Y = PointToClient(Cursor.Position).Y;
             MouseManager.setMouseState(e.Button, true);
         }
         private void GameForm_MouseUp(object sender, MouseEventArgs e)
@@ -37,11 +39,12 @@ namespace Game
         public void StartGame()
         {
             gameTimer = new Timer();
-            gameTimer.Interval = 20;
+            gameTimer.Interval = 30;
             gameTimer.Tick += GameTimer_Tick;
-            player = new Player(50, this.Height - Player.Height_Player,this);
-            player.Start_Turn();
             gameTimer.Start();
+            br_build = new BricksBuilder(this,2);
+            player = new Player(50, br_build.Beginnig_Y - Player.Height_Player, this);
+            player.Start_Turn();
         }
         public void EndGame()
         {
@@ -54,10 +57,21 @@ namespace Game
         }
         private void updateGame()
         {
-            player.Update();
+            player.Update(br_build.Beginnig_Y, frame_no);
+            
+
+            if (frame_no + 1 > 10000000000)
+            {
+                frame_no = 1;
+            }
+            else
+            {
+                frame_no++;
+            }
         }
         public void DrawGame(Graphics g)
         {
+            br_build.draw(g);
             player.Draw(g);
         }
         protected override void OnPaint(PaintEventArgs e)
