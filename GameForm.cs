@@ -25,12 +25,10 @@ namespace Game
         public GameForm()       //SinglePlayer Constructor
         {
             InitializeComponent();
-            this.gp = new GamePanel();
+            this.gp = new GamePanel(User.Host);
             Controls.Add(gp);
             gp.StartGame();
         }
-
-
         public GameForm(int myPortNumber,GamePanel gp)         //Host Constructor
         {
             InitializeComponent();
@@ -40,7 +38,6 @@ namespace Game
 
             initHost_Communication(myPortNumber);
         }
-
         public GameForm(String hostIP,int hostPortNumber,GamePanel gp)      //Guest Constructor
         {
             InitializeComponent();

@@ -9,34 +9,6 @@ using System.Threading;
 
 namespace Game.GameObjects
 {
-    class ThreadHelper
-    {
-        System.Windows.Forms.Timer timer;
-        private Fire fire;
-        private int i = 1;
-        public ThreadHelper(Fire fire)
-        {
-            this.fire = fire;
-        }
-        public void ThreadHandling()
-        {
-            timer = new System.Windows.Forms.Timer();
-            timer.Interval = 20;
-        //    timer.Tick += Timer_Tick1;
-            timer.Start();
-
-        }
-
-        //private void Timer_Tick1(object sender, EventArgs e)
-        //{
-        //    fire.fire_img = Image.FromFile(@"ResourcesNew\explosions\small_explosion\explosion" + i + ".png");
-        //    i++;
-        //    if (i > 31)
-        //    {
-        //        timer.Stop();
-        //    }
-        //}
-    }
     class Fire : GameObject
     {
         Image Drawed_img;
@@ -44,15 +16,12 @@ namespace Game.GameObjects
         float gravity;
         float speedY;
         float speedX;
-        float friction;
-        float friction_coef;
         int img_indx;
         FireType fireType;
         public bool IsCollided { get; set; }
         public bool isFinished = false;
         Explosion explosion;
         public double Fire_Radius { get; }
-        Thread thread;
         public Fire(float x, float y, FireType fireType)
             : base(x, y)
         {
@@ -61,9 +30,7 @@ namespace Game.GameObjects
             Drawed_img = imgs[0];
             base.Height = Drawed_img.Height;
             base.Width = Drawed_img.Width;
-            gravity = 1;
-            //friction_coef = -0.3f;
-            //friction = speedX * friction_coef;
+            gravity = 1        
             Fire_Radius = Drawed_img.Width / 2;
             img_indx = 0;
             this.fireType = fireType;
@@ -169,11 +136,7 @@ namespace Game.GameObjects
         {
             return (((this.Y - p.Y) <= p.Height) && ((this.X - p.X) <= p.Width));
         }
-        public void animate()       //To be put on colliding
-        {
-            ThreadHelper th = new ThreadHelper(this);
-            th.ThreadHandling();
-        }
+       
     }
     class Power
     {

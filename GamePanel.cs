@@ -8,19 +8,24 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 namespace Game
 {
+   public enum User
+    {
+        Host,Client
+    }
     public class GamePanel : Panel
     {
         Player player;
         Timer gameTimer;
         double frame_no=1;
         BricksBuilder br_build;
-        public GamePanel()
+        User User;
+        public GamePanel(User user)
         {
-            
             this.DoubleBuffered = true;
             this.Dock = DockStyle.Fill;
             this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.GameForm_MouseDown);
             this.MouseUp += new System.Windows.Forms.MouseEventHandler(this.GameForm_MouseUp);
+            this.User = user;
         }
         private void GameForm_MouseDown(object sender, MouseEventArgs e)
         {
