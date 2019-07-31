@@ -56,7 +56,7 @@ namespace Game
         }
         private void updateGame()
         {
-            player.Update(frame_no);
+            player.Update(br_build.Beginnig_Y, frame_no);
             
 
             if (frame_no + 1 > 10000000000)

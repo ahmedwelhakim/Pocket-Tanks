@@ -17,6 +17,7 @@ namespace Game.GameObjects
         float friction;
         float friction_coef;
         int img_indx;
+        FireType fireType;
         public bool IsCollided { get; set; }
         public bool isFinished=false;
 
@@ -31,12 +32,12 @@ namespace Game.GameObjects
             Drawed_img = imgs[0];
             base.Height = Drawed_img.Height;
             base.Width = Drawed_img.Width;
-            gravity = 2;
+            gravity = 1;
             //friction_coef = -0.3f;
             //friction = speedX * friction_coef;
             Fire_Radius = Drawed_img.Width / 2;
             img_indx = 0;
-           
+            this.fireType = fireType;
         }
         public override void Draw(Graphics g)
         {
@@ -49,22 +50,22 @@ namespace Game.GameObjects
                 explosion.Draw(g);
             }
         }
-        private void Gravity(GamePanel gp)
+        private void Gravity(float ground_Y)
         {
-            if (Y < gp.Height- Drawed_img.Height)
+            if (Y < ground_Y - Drawed_img.Height)
             {
                 speedY += gravity;
-                if(Y+speedY> gp.Height - Drawed_img.Height)
+                if(Y+speedY> ground_Y - Drawed_img.Height)
                 {
-                    Y = gp.Height - Drawed_img.Height;
+                    Y = ground_Y - this.Height;
                 }
             }
-            if (Y >= gp.Height - Drawed_img.Height)
+            if (Y >= ground_Y - this.Height)
             {
                 speedY = 0;
                 speedX = 0;
-                Y = gp.Height - Drawed_img.Height;
-                Explode();
+                Y = ground_Y - this.Height;
+                Explode(Y);
                
                // friction = speedX * friction_coef;
             }
@@ -74,18 +75,26 @@ namespace Game.GameObjects
             X += speedX;
             Y += speedY;
         }
-        public void Explode()
+        public void Explode(float y)
         {
             if (!IsCollided)
             {
-                explosion = new Explosion(X, Y + 5, ExplosionType.small);
+                if (fireType == FireType.Cutter)
+                {
+                    explosion = new Explosion(X, y + 10, ExplosionType.nuke);
+                }
+                else
+                {
+                    explosion = new Explosion(X, y + 5, ExplosionType.small);
+                }
+
             }
             IsCollided = true;
         }
-        public void Update(GamePanel gp,double frame_no)
+        public void Update(float ground_Y, double frame_no)
         {
             this.Move();
-            this.Gravity(gp);
+            this.Gravity(ground_Y);
             if(frame_no%2==0)
             {
                 if(img_indx<imgs.Count-1)
@@ -136,7 +145,7 @@ namespace Game.GameObjects
     class Power
     {
         protected double Power_Val { get; }
-        private const float speed_val=50;
+        private const float speed_val=37;
         public Power(double pow)
         {
             if (pow > 100)

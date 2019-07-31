@@ -40,7 +40,7 @@ namespace Game.GameObjects
             turn = true;
             fired = false;
             MouseManager.is_Left_Btn_Released = false;
-            fire = new Fire((X + (Width_Player / 2)-19), Y-10,FireType.Cutter);
+            fire = new Fire((X + (Width_Player / 2)-19), Y-10,FireType.Single_Shot);
             Console.WriteLine("Turn Started");
         }
         public void End_Turn()
@@ -66,7 +66,7 @@ namespace Game.GameObjects
                 turn = false;
             }
         }
-        public void Update( double frame_no)
+        public void Update( float ground_Y,double frame_no)
         {
             if(MouseManager.getMouseState(MouseButtons.Left) && turn)
             {
@@ -81,16 +81,21 @@ namespace Game.GameObjects
             Shoot();
             if (fire!=null&& fired)
             {
-                fire.Update(gp, frame_no);
-                if (fire.Y > (this.Y+Height/2))
+                fire.Update(ground_Y, frame_no);
+                if (fire.Y -fire.Height > ground_Y)
                 {
-                    fire.Y = this.Y+Height/2 ;
-                    fire.Explode();
+                    fire.Y = ground_Y - this.Height;
+                    fire.Explode(ground_Y-this.Height);
                 }
+                
+                
+                    
+               
                 if (fire.isFinished)
                 {
                     fire = null;
                 }
+               
             }
            
         }

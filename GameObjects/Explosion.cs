@@ -57,6 +57,7 @@ namespace Game.GameObjects
         public bool isFinished = false;
         int img_indx=0;
         double old_Height;
+        ExplosionType explosionType;
         public Explosion(float x,float y,ExplosionType explosionType)
             :base(x,y)
         {
@@ -65,23 +66,43 @@ namespace Game.GameObjects
             Drawed_img = imgs[0];
             base.Height = Drawed_img.Height;
             base.Width = Drawed_img.Width;
-           
+            this.explosionType = explosionType;
         }
         public void StartExplosion(double frame_no)
         {
-            if(frame_no%1==0)
+            if (explosionType == ExplosionType.nuke)
             {
-                old_Height = imgs[img_indx].Height;
-                if(img_indx<imgs.Count-1)
+                if (frame_no % 2 == 0)
                 {
-                    img_indx++;
+                    old_Height = imgs[img_indx].Height;
+                    if (img_indx < imgs.Count - 1)
+                    {
+                        img_indx++;
+                    }
+                    else
+                    {
+                        isFinished = true;
+                    }
+                    Drawed_img = imgs[img_indx];
+                    Y -= (int)(Drawed_img.Height - old_Height) / 2;
                 }
-                else
+            }
+            else
+            {
+                if (frame_no % 1 == 0)
                 {
-                    isFinished = true;
+                    old_Height = imgs[img_indx].Height;
+                    if (img_indx < imgs.Count - 1)
+                    {
+                        img_indx++;
+                    }
+                    else
+                    {
+                        isFinished = true;
+                    }
+                    Drawed_img = imgs[img_indx];
+                    Y -= (int)(Drawed_img.Height - old_Height) / 2;
                 }
-                Drawed_img = imgs[img_indx];
-                Y -= (int)(Drawed_img.Height - old_Height)/2;
             }
         }
 
