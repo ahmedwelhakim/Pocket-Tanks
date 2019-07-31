@@ -46,11 +46,9 @@ namespace Game.GameObjects
         float speedX;
         float friction;
         float friction_coef;
-<<<<<<< HEAD
-        Thread thread;
-=======
 
->>>>>>> 4e931aed645e329ce9fe5755ad3f4a65a5f0f8de
+        Thread thread;
+
      
         public Fire(float x,float y) 
             :base(x,y)
