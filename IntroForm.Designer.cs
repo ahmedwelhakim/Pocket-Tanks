@@ -40,6 +40,7 @@
             this.label3 = new System.Windows.Forms.Label();
             this.Play_Btn = new System.Windows.Forms.Button();
             this.Single_RadBtn = new System.Windows.Forms.RadioButton();
+            this.spclient_rdbutton1 = new System.Windows.Forms.RadioButton();
             this.Client_GroupBox.SuspendLayout();
             this.Host_GroupBox.SuspendLayout();
             this.SuspendLayout();
@@ -64,7 +65,7 @@
             this.Client_RadioBtn.Location = new System.Drawing.Point(270, 94);
             this.Client_RadioBtn.Margin = new System.Windows.Forms.Padding(2);
             this.Client_RadioBtn.Name = "Client_RadioBtn";
-            this.Client_RadioBtn.Size = new System.Drawing.Size(52, 17);
+            this.Client_RadioBtn.Size = new System.Drawing.Size(51, 17);
             this.Client_RadioBtn.TabIndex = 7;
             this.Client_RadioBtn.TabStop = true;
             this.Client_RadioBtn.Text = "Client";
@@ -90,7 +91,7 @@
             this.label1.Location = new System.Drawing.Point(5, 23);
             this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(83, 13);
+            this.label1.Size = new System.Drawing.Size(82, 13);
             this.label1.TabIndex = 4;
             this.label1.Text = "Host IP address";
             // 
@@ -109,7 +110,7 @@
             this.label2.Location = new System.Drawing.Point(5, 54);
             this.label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(27, 13);
+            this.label2.Size = new System.Drawing.Size(26, 13);
             this.label2.TabIndex = 5;
             this.label2.Text = "Port";
             // 
@@ -148,7 +149,7 @@
             this.label3.Location = new System.Drawing.Point(15, 30);
             this.label3.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(27, 13);
+            this.label3.Size = new System.Drawing.Size(26, 13);
             this.label3.TabIndex = 6;
             this.label3.Text = "Port";
             // 
@@ -176,11 +177,26 @@
             this.Single_RadBtn.UseVisualStyleBackColor = true;
             this.Single_RadBtn.CheckedChanged += new System.EventHandler(this.Single_RadBtn_CheckedChanged);
             // 
+            // spclient_rdbutton1
+            // 
+            this.spclient_rdbutton1.AutoSize = true;
+            this.spclient_rdbutton1.Cursor = System.Windows.Forms.Cursors.Arrow;
+            this.spclient_rdbutton1.Location = new System.Drawing.Point(372, 255);
+            this.spclient_rdbutton1.Margin = new System.Windows.Forms.Padding(2);
+            this.spclient_rdbutton1.Name = "spclient_rdbutton1";
+            this.spclient_rdbutton1.Size = new System.Drawing.Size(65, 17);
+            this.spclient_rdbutton1.TabIndex = 12;
+            this.spclient_rdbutton1.TabStop = true;
+            this.spclient_rdbutton1.Text = "sp Client";
+            this.spclient_rdbutton1.UseVisualStyleBackColor = true;
+            this.spclient_rdbutton1.CheckedChanged += new System.EventHandler(this.spclient_rdbutton1_CheckedChanged);
+            // 
             // IntroForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(532, 360);
+            this.Controls.Add(this.spclient_rdbutton1);
             this.Controls.Add(this.Single_RadBtn);
             this.Controls.Add(this.Play_Btn);
             this.Controls.Add(this.Host_GroupBox);
@@ -212,5 +228,6 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Button Play_Btn;
         private System.Windows.Forms.RadioButton Single_RadBtn;
+        private System.Windows.Forms.RadioButton spclient_rdbutton1;
     }
 }

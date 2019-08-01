@@ -47,6 +47,7 @@ namespace Game.GameObjects
         }
         public void Start_Turn()
         {
+            isPowerAngle_Recieved = false;
             turn = true;
             fired = false;
             MouseManager.is_Left_Btn_Released = false;
@@ -66,7 +67,7 @@ namespace Game.GameObjects
             turn = false;
             MouseManager.is_Left_Btn_Released = false;
             fire = null;
-          
+            isPowerAngle_Recieved = false;
             fired = false;
         }
         public bool isTurnFinished()

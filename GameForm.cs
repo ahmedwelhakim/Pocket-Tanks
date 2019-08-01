@@ -14,6 +14,7 @@ namespace Game
 {
     public partial class GameForm : Form
     {
+        private bool firstTurn = true;
         private GamePanel gp;
         public Thread t;
         private bool communicating=true;
@@ -22,11 +23,14 @@ namespace Game
         public  StreamWriter sw;
         IntroForm IntroForm;
         String [] powAngle;
+        User user;
 
-        public GameForm()       //SinglePlayer Constructor
+        public GameForm(IntroForm introform,User user)       //SinglePlayer Constructor
         {
             InitializeComponent();
-            this.gp = new GamePanel(User.Host);
+            this.gp = new GamePanel(user);
+            gp.gf = this;
+            gp.itf = introform;
             Controls.Add(gp);
             gp.StartGame();
         }
@@ -34,10 +38,10 @@ namespace Game
         {
             InitializeComponent();
             this.IntroForm = introForm;
-            gp = new GamePanel(User.Host);
+            this.gp = new GamePanel(User.Host);
             Controls.Add(gp);
             gp.StartGame();
-
+            user = User.Host;
             initHost_Communication(myPortNumber);
         }
         public GameForm(String hostIP,int hostPortNumber, IntroForm introForm)      //Guest Constructor
@@ -47,7 +51,7 @@ namespace Game
             gp = new GamePanel(User.Client);
             Controls.Add(gp);
             gp.StartGame();
-
+            user = User.Client;
             initClient_Communication(hostIP, hostPortNumber);
         }
 
@@ -56,6 +60,7 @@ namespace Game
             TcpListener listener = TcpListener.Create(myPortNumber);
             listener.Start();
             communicator = listener.AcceptTcpClient();
+            Console.WriteLine("ClientACCEPTED");
             sr = new StreamReader(communicator.GetStream());
             sw = new StreamWriter(communicator.GetStream());
             t = new Thread(communicate);
@@ -76,14 +81,30 @@ namespace Game
         {
             while(communicating)
             {
-                string request = sr.ReadLine();
-                string[] tokens = request.Split(' ');
-                int angle = Convert.ToInt32(tokens[0]);
-                double power = Convert.ToDouble(tokens[1]);
-        
+                if (user == User.Host && firstTurn)
+                {
+                    sw.WriteLine(gp.getPlayerAnglePower());
+                    sw.Flush();
+                    firstTurn = false;
+                }
+                else if (user == User.Client)
+                {
+                    string request = sr.ReadLine();
+                    if (request == "" || request == null)
+                        Console.WriteLine("NUKK");
+                    if (request != "" && request != null)
+                    {
+                        Console.WriteLine("request is recieved");
+                        string[] tokens = request.Split(' ');
+                        int angle = Convert.ToInt32(tokens[0]);
+                        double power = Convert.ToDouble(tokens[1]); gp.setOpponentAnglePower(angle, power);
+                    }
+
+
+                }
             }
         }
-
+        
 
     }
 }

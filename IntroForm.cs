@@ -35,6 +35,12 @@ namespace Game
             Client_GroupBox.Enabled = false;
             Host_GroupBox.Enabled = false;
         }
+        private void spclient_rdbutton1_CheckedChanged(object sender, EventArgs e)
+        {
+
+            Client_GroupBox.Enabled = false;
+            Host_GroupBox.Enabled = false;
+        }
         private void Play_Btn_Click(object sender, EventArgs e)
         {
             if(Host_RadioBtn.Checked)
@@ -55,9 +61,16 @@ namespace Game
                 this.Hide();
                 gf.Show();
             }
+            else if(Single_RadBtn.Checked)
+            {
+                GameForm gf = new GameForm(this,User.Host);
+                this.Hide();
+                gf.Show();
+            }
             else
             {
-                GameForm gf = new GameForm();
+
+                GameForm gf = new GameForm(this,User.Client);
                 this.Hide();
                 gf.Show();
             }
