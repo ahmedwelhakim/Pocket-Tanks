@@ -109,9 +109,7 @@ namespace Game
 
                 opponentFire = opponent.getShootedFire();
                 playerFire = player.getShootedFire();
-                opponent.Health = 10;
             }
-
         }
         public void EndGame()
         {
