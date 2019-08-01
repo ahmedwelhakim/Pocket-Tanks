@@ -17,7 +17,7 @@ namespace Game
         public GameForm gf { set; get; }
         public IntroForm itf { set; get; }
         public bool playerTurn = false;
-        public bool oppositeTurn = false;
+        public bool opponentTurn = false;
         Player player;
         Player opponent;
         Timer gameTimer;
@@ -83,14 +83,14 @@ namespace Game
 
                 opponentFire = opponent.getShootedFire();
                 playerFire = player.getShootedFire();
-                opponent.Health = 10;
+              
             }
 
-            if (User == User.Client)
+           else if (User == User.Client)
             {
                 opponent = new Player(50, br_build.Beginnig_Y - Player.Height_Player, this, PlayerType.Opponent);
                 player = new Player(this.Width - 150, br_build.Beginnig_Y - Player.Height_Player, this, PlayerType.MyPlayer);
-               // player.Start_Turn();
+                opponent.Start_Turn();
 
                 opponent_health_lbl = new Label();
                 opponent_health_lbl.Location = new Point(this.Width - 330, 20);
@@ -160,12 +160,12 @@ namespace Game
                 {
                     player.End_Turn();
                     opponent.Start_Turn();
-                    opponent.angle = Random.Next(111, 115);
-                    opponent.power = new Power(Random.Next(96, 100));
+                    //opponent.angle = Random.Next(111, 115);
+                    //opponent.power = new Power(Random.Next(96, 100));
                     //opponent.angle = 113;
                     //opponent.power = new Power( 100);
-                    opponent.isPowerAngle_Recieved = true;
-                    oppositeTurn = true;
+                   // opponent.isPowerAngle_Recieved = true;
+                    opponentTurn = true;
                     playerTurn = false;
                 }
                 if (opponent.isTurnFinished())
@@ -173,7 +173,7 @@ namespace Game
                     opponent.End_Turn();
                     player.Start_Turn();
                     playerTurn = true;
-                    oppositeTurn = false;
+                    opponentTurn = false;
                 }
 
                 opponent_health_lbl.Text = ("Opponent Health: " + opponent.Health);
@@ -183,6 +183,7 @@ namespace Game
                 opponentFire = opponent.getShootedFire();
                 playerFire = player.getShootedFire();
 
+                //Check collisions of fire with tanks to lower health
                 if (playerFire != null && latency >= 50)
                 {
                     if (GameObject.checkCollision(opponent, playerFire))
@@ -201,6 +202,8 @@ namespace Game
                     }
 
                 }
+                
+               
 
                 latency++;
                 if (frame_no + 1 > 10000000000)
@@ -212,6 +215,7 @@ namespace Game
                     frame_no++;
                 }
             }
+
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
@@ -238,14 +242,20 @@ namespace Game
             DrawGame(e.Graphics);
         }
     public String getPlayerAnglePower()
-    {   if(player != null&&player.fired)
-            return player.getAngleAndPower(); return null;
+    {
+            if (player != null && player.fired && player.GetAngleAndPower()!=null)
+            {
+                return player.GetAngleAndPower();
+            }
+            return null;
     }
     public void setOpponentAnglePower(int angle,double power)
         {
             if(opponent != null)
             {
-                opponent.angle = angle;     opponent.power = new Power(power);      opponent.isPowerAngle_Recieved = true;
+                opponent.angle = angle;
+                opponent.power = new Power(power);
+                opponent.isPowerAngle_Recieved = true;
             }
         }
     }

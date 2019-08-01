@@ -14,7 +14,8 @@ namespace Game
 {
     public partial class GameForm : Form
     {
-        private bool firstTurn = true;
+        private bool read ;
+        private bool write;
         private GamePanel gp;
         public Thread t;
         private bool communicating=true;
@@ -43,6 +44,8 @@ namespace Game
             gp.StartGame();
             user = User.Host;
             initHost_Communication(myPortNumber);
+            write = true;
+            read = false;
         }
         public GameForm(String hostIP,int hostPortNumber, IntroForm introForm)      //Guest Constructor
         {
@@ -53,6 +56,8 @@ namespace Game
             gp.StartGame();
             user = User.Client;
             initClient_Communication(hostIP, hostPortNumber);
+            write = false;
+            read = true;
         }
 
         private void initHost_Communication(int myPortNumber)
@@ -81,30 +86,30 @@ namespace Game
         {
             while(communicating)
             {
-                if (user == User.Host && firstTurn)
+                if (write)
                 {
-                    sw.WriteLine(gp.getPlayerAnglePower());
-                    sw.Flush();
-                    firstTurn = false;
+                    if ((gp.getPlayerAnglePower() != null))
+                    {
+                        sw.WriteLine(gp.getPlayerAnglePower());
+                        sw.Flush();
+                        read = true;
+                        write = false;
+                    }
                 }
-                else if (user == User.Client)
+                if (read)
                 {
                     string request = sr.ReadLine();
-                    if (request == "" || request == null)
-                        Console.WriteLine("NUKK");
                     if (request != "" && request != null)
                     {
-                        Console.WriteLine("request is recieved");
                         string[] tokens = request.Split(' ');
                         int angle = Convert.ToInt32(tokens[0]);
-                        double power = Convert.ToDouble(tokens[1]); gp.setOpponentAnglePower(angle, power);
+                        double power = Convert.ToDouble(tokens[1]);
+                        gp.setOpponentAnglePower(angle, power);
+                        read = false;
+                        write = true;
                     }
-
-
-                }
+                }    
             }
         }
-        
-
     }
 }

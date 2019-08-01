@@ -208,9 +208,16 @@ namespace Game.GameObjects
 
         }
        
-        public String getAngleAndPower()
+        public string GetAngleAndPower()
         {
-            return (angle + " " + power.ToString());
+            if (power != null)
+            {
+                return (angle + " " + power.ToString());
+            }
+            else
+            {
+                return null;
+            }
 
         }
 
