@@ -98,12 +98,34 @@ namespace Game
             player.Update(br_build.Beginnig_Y, frame_no);
             opponent.Update(br_build.Beginnig_Y, frame_no);
 
+            if(opponent.Health<=0)
+            {
+                if(playerFire==null )
+                {
+                    EndGame();
+                    MessageBox.Show("YOU WIN!");
+                    Application.Exit();
+                }
+               
+            }
+            if(player.Health<=0)
+            {
+                if (opponentFire == null )
+                {
+                    EndGame();
+                    MessageBox.Show("YOU LOOSE!");
+                    Application.Exit();
+                }
+            }
+
             if(player.isTurnFinished())
             {
                 player.End_Turn();
                 opponent.Start_Turn();
-                opponent.angle = Random.Next(110, 120);
-                opponent.power = new Power(Random.Next(90, 100));
+                opponent.angle = Random.Next(111, 115);
+                opponent.power = new Power(Random.Next(96, 100));
+                //opponent.angle = 113;
+                //opponent.power = new Power( 100);
                 opponent.isPowerAngle_Recieved = true;
             
             }
@@ -112,12 +134,15 @@ namespace Game
                 opponent.End_Turn();
                 player.Start_Turn();
             }
+
             opponent_health_lbl.Text = ("Opponent Health: " + opponent.Health);
             player_health_lbl.Text = ("Player Health: " + player.Health);
+
+            //updating the fire of every player
             opponentFire = opponent.getShootedFire();
             playerFire = player.getShootedFire();
 
-            if(playerFire!=null && latency>=50)
+            if (playerFire!=null && latency>=50)
             {
                 if(GameObject.checkCollision(opponent, playerFire))
                 {
@@ -134,18 +159,6 @@ namespace Game
                     latency = 0;
                 }
 
-            }
-            if(opponent.Health<=0)
-            {
-                EndGame();
-                MessageBox.Show("YOU WIN!");
-                Application.Exit();
-            }
-            if(player.Health<=0)
-            {
-                EndGame();
-                MessageBox.Show("YOU LOOSE!");
-                Application.Exit();
             }
 
             latency++;
