@@ -106,12 +106,6 @@
   <ItemGroup />
   <ItemGroup>
     <None Include="bin\Debug\resourcesnew\background\bg.png" />
-    <Content Include="Sprites\Fire.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Sprites\Player.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

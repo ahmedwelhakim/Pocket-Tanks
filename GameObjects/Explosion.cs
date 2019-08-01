@@ -72,7 +72,7 @@ namespace Game.GameObjects
         {
             if (explosionType == ExplosionType.nuke)
             {
-                if (frame_no % 2 == 0)
+                if (frame_no % 1 == 0)
                 {
                     old_Height = imgs[img_indx].Height;
                     if (img_indx < imgs.Count - 1)

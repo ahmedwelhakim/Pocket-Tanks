@@ -20,6 +20,7 @@ namespace Game
         private TcpClient communicator;
         public  StreamReader sr;
         public  StreamWriter sw;
+        IntroForm IntroForm;
         String [] powAngle;
 
         public GameForm()       //SinglePlayer Constructor
@@ -29,19 +30,21 @@ namespace Game
             Controls.Add(gp);
             gp.StartGame();
         }
-        public GameForm(int myPortNumber,GamePanel gp)         //Host Constructor
+        public GameForm(int myPortNumber,IntroForm introForm)//Host Constructor
         {
             InitializeComponent();
-            this.gp = gp;
+            this.IntroForm = introForm;
+            gp = new GamePanel(User.Host);
             Controls.Add(gp);
             gp.StartGame();
 
             initHost_Communication(myPortNumber);
         }
-        public GameForm(String hostIP,int hostPortNumber,GamePanel gp)      //Guest Constructor
+        public GameForm(String hostIP,int hostPortNumber, IntroForm introForm)      //Guest Constructor
         {
             InitializeComponent();
-            this.gp = gp;
+            this.IntroForm = introForm;
+            gp = new GamePanel(User.Client);
             Controls.Add(gp);
             gp.StartGame();
 
@@ -77,8 +80,7 @@ namespace Game
                 string[] tokens = request.Split(' ');
                 int angle = Convert.ToInt32(tokens[0]);
                 double power = Convert.ToDouble(tokens[1]);
-                
-
+        
             }
         }
 

@@ -9,6 +9,10 @@ using System.Windows.Forms;
 
 namespace Game.GameObjects
 {
+    public enum PlayerType
+    {
+        Opponent,MyPlayer
+    }
     class Player : GameObject
     {
         private static int moves = 5;  //each tank starts a new game with 5 available moves 
@@ -19,14 +23,18 @@ namespace Game.GameObjects
         Label lbl = new Label();
         Pen pen;
         Pen dashed_pen;
+        PlayerType PlayerType;
 
         private Fire fire;
-        protected int angle = 60; //angle of the shooted fire
-        protected Power power;//power of shooted fire
-        private bool turn = false;//the turn of this player to decide wether to shoot or not
-        private bool fired = false;
+        public int angle = 60; //angle of the shooted fire
+        public Power power;//power of shooted fire
+        protected bool turn = false;//the turn of this player to decide wether to shoot or not
+        public bool fired = false;
+        public bool isPowerAngle_Recieved;
+        int turns_count = 1;
+        public int Health { get; set; } 
 
-        public Player(float x, float y, GamePanel gp) : base(x, y)
+        public Player(float x, float y, GamePanel gp,PlayerType playerType) : base(x, y)
         {
             base.Height = Player_Image.Height;
             base.Width = Player_Image.Width;
@@ -34,29 +42,50 @@ namespace Game.GameObjects
             pen = new Pen(Color.FromArgb(80, 68, 22), 5);
             dashed_pen = new Pen(Color.SandyBrown, 2.7f);
             dashed_pen.DashStyle = DashStyle.Dot;
+            this.PlayerType = playerType;
+            Health = 100;
         }
         public void Start_Turn()
         {
             turn = true;
             fired = false;
             MouseManager.is_Left_Btn_Released = false;
-            fire = new Fire((X + (Width_Player / 2) - 19), Y - 10, FireType.Single_Shot);
-            Console.WriteLine("Turn Started");
+            if(turns_count%2==0)
+            {
+                fire = new Fire((X + (Width_Player / 2) - 19), Y - 10, FireType.Single_Shot);
+            }
+           else
+            {
+                fire = new Fire((X + (Width_Player / 2) - 19), Y - 10, FireType.Cutter);
+            }
+            turns_count++;
+           
         }
         public void End_Turn()
         {
             turn = false;
             MouseManager.is_Left_Btn_Released = false;
             fire = null;
-            Console.WriteLine("Turn Ended");
+          
             fired = false;
+        }
+        public bool isTurnFinished()
+        {
+            if(fire!=null)
+            {
+        
+                return fire.isFinished;
+            }
+            else
+            return false;
         }
         public void Shoot()
         {
-            if (turn && MouseManager.is_Left_Btn_Released && fire != null)
+            if (turn && MouseManager.is_Left_Btn_Released && fire != null && PlayerType==PlayerType.MyPlayer)
             {
                 fire.ShootFire(angle, power);
                 fired = true;
+                Console.WriteLine("--------------PLAYER-------------------");
                 Console.WriteLine("FIRED");
                 Console.WriteLine("Angele: {0}     Power: {1}", angle, power);
                 MouseManager.is_Left_Btn_Released = false;
@@ -66,10 +95,25 @@ namespace Game.GameObjects
                 gp.Controls.Remove(lbl);
                 turn = false;
             }
+            else if(PlayerType == PlayerType.Opponent && turn&& isPowerAngle_Recieved)
+            {
+                fire.ShootFire(angle, power);
+                fired = true;
+                Console.WriteLine("--------------OPPONENT-------------------");
+                Console.WriteLine("FIRED");
+                Console.WriteLine("Angele: {0}     Power: {1}", angle, power);
+                
+                Console.WriteLine(fire);
+                Console.WriteLine("------------------------------------");
+
+                gp.Controls.Remove(lbl);
+                turn = false;
+            }
+
         }
         public void Update(float ground_Y, double frame_no)
         {
-            if (MouseManager.getMouseState(MouseButtons.Left) && turn)
+            if (MouseManager.getMouseState(MouseButtons.Left) && turn && PlayerType== PlayerType.MyPlayer )
             {
                 gp.Controls.Add(lbl);
                 Calc_Angle_Power();
@@ -88,17 +132,7 @@ namespace Game.GameObjects
                     fire.Y = ground_Y - this.Height;
                     fire.Explode(ground_Y - this.Height);
                 }
-
-
-
-
-                if (fire.isFinished)
-                {
-                    fire = null;
-                }
-
             }
-
         }
         private void Calc_Angle_Power()
         {
@@ -113,6 +147,10 @@ namespace Game.GameObjects
             double angle_degree = Math.Atan2(-distY, distX) * (180.0 / Math.PI);
             angle = (int)angle_degree;
             power = new Power((dist_Magn / Max_Dist) * 100);
+        }
+        public Fire getShootedFire()
+        {
+            return fire;
         }
         public void Move_Right(Player p)
         {
@@ -145,15 +183,19 @@ namespace Game.GameObjects
             float y2 = y1 - (float)(len * Math.Sin(angle_rad));
             g.DrawLine(pen, new PointF(x1, y1), new PointF(x2, y2));
         }
-        public override void Draw(Graphics g)
+        public void DrawFire(Graphics g)
         {
-            g.DrawImage(Player_Image, new PointF(X, Y));
-            DrawTankPipe(g);
             if (fire != null && fired)
             {
                 fire.Draw(g);
             }// Draw Fire 
-            if (MouseManager.getMouseState(MouseButtons.Left) && turn)
+        }
+        public override void Draw(Graphics g)
+        {
+            g.DrawImage(Player_Image, new PointF(X, Y));
+            DrawTankPipe(g);
+            
+            if (MouseManager.getMouseState(MouseButtons.Left) && turn && PlayerType==PlayerType.MyPlayer)
             {
                 int x1 = MouseManager.X;
                 int y1 = MouseManager.Y;
@@ -164,6 +206,7 @@ namespace Game.GameObjects
             } // Draw dotted line when shooting fire
 
         }
+       
         public String getAngleAndPower()
         {
             return (angle + " " + power.ToString());

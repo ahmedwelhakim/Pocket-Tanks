@@ -30,7 +30,7 @@ namespace Game.GameObjects
             Drawed_img = imgs[0];
             base.Height = Drawed_img.Height;
             base.Width = Drawed_img.Width;
-            gravity = 1        
+            gravity = 1;   
             Fire_Radius = Drawed_img.Width / 2;
             img_indx = 0;
             this.fireType = fireType;
@@ -86,6 +86,7 @@ namespace Game.GameObjects
             }
             IsCollided = true;
         }
+
         public void Update(float ground_Y, double frame_no)
         {
             this.Move();
@@ -110,6 +111,7 @@ namespace Game.GameObjects
                 {
                     explosion = null;
                     isFinished = true;
+                 
                 }
             }
         }
@@ -141,7 +143,7 @@ namespace Game.GameObjects
     class Power
     {
         protected double Power_Val { get; }
-        private const float speed_val = 37;
+        private const float speed_val = 35;
         public Power(double pow)
         {
             if (pow > 100)
