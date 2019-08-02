@@ -23,23 +23,27 @@ namespace Game
         {
             Client_GroupBox.Enabled = false;
             Host_GroupBox.Enabled = true;
+            //Play_Btn.Enabled = true;
         }
 
         private void Client_RadioBtn_CheckedChanged(object sender, EventArgs e)
         {
             Client_GroupBox.Enabled = true;
             Host_GroupBox.Enabled = false;
+            //Play_Btn.Enabled = true;
         }
         private void Single_RadBtn_CheckedChanged(object sender, EventArgs e)
         {
             Client_GroupBox.Enabled = false;
             Host_GroupBox.Enabled = false;
+           // Play_Btn.Enabled = true;
         }
         private void spclient_rdbutton1_CheckedChanged(object sender, EventArgs e)
         {
 
             Client_GroupBox.Enabled = false;
             Host_GroupBox.Enabled = false;
+          //  Play_Btn.Enabled = true;
         }
         private void Play_Btn_Click(object sender, EventArgs e)
         {
@@ -77,5 +81,41 @@ namespace Game
            
         }
 
+        private void button1_Click(object sender, EventArgs e)
+        {
+            SinglePlayer_groupBox.Hide();
+            Multiplayer_groupBox.Show();
+        }
+
+        private void groupBox1_Enter(object sender, EventArgs e)
+        {
+
+        }
+
+        private void spclient_rdbutton1_CheckedChanged_1(object sender, EventArgs e)
+        {
+            Play_Btn.Enabled = true;
+        }
+
+        private void Singleplayer_Click(object sender, EventArgs e)
+        {
+            SinglePlayer_groupBox.Show();
+            Multiplayer_groupBox.Hide();
+        }
+
+        private void Single_RadBtn_CheckedChanged_1(object sender, EventArgs e)
+        {
+            Play_Btn.Enabled = true;
+        }
+
+        private void Host_RadioBtn_CheckedChanged_1(object sender, EventArgs e)
+        {
+            Play_Btn.Enabled = true;
+        }
+
+        private void Client_RadioBtn_CheckedChanged_1(object sender, EventArgs e)
+        {
+            Play_Btn.Enabled = true;
+        }
     }
 }
