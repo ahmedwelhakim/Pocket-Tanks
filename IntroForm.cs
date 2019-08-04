@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Media;
 
 namespace Game
 {
@@ -47,7 +48,9 @@ namespace Game
         }
         private void Play_Btn_Click(object sender, EventArgs e)
         {
-            if(Host_RadioBtn.Checked)
+            SoundPlayer exp = new SoundPlayer(@"resourcesnew\audio\ayyy.wav");
+            exp.Play();
+                if (Host_RadioBtn.Checked)
             {
                 
                 int portNum = int.Parse(Host_Port_TxtBox.Text);
@@ -116,6 +119,12 @@ namespace Game
         private void Client_RadioBtn_CheckedChanged_1(object sender, EventArgs e)
         {
             Play_Btn.Enabled = true;
+        }
+
+        private void IntroForm_Load(object sender, EventArgs e)
+        {
+            SoundPlayer exp = new SoundPlayer(@"resourcesnew\audio\BurtBacharach.wav");
+            exp.Play();
         }
     }
 }

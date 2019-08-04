@@ -300,6 +300,7 @@
             this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "IntroForm";
             this.Text = "IntroForm";
+            this.Load += new System.EventHandler(this.IntroForm_Load);
             this.Multiplayer_groupBox.ResumeLayout(false);
             this.Multiplayer_groupBox.PerformLayout();
             this.Client_GroupBox.ResumeLayout(false);

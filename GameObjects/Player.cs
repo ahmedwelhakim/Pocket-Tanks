@@ -6,6 +6,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Media;
+
 
 namespace Game.GameObjects
 {
@@ -84,6 +86,8 @@ namespace Game.GameObjects
         {
             if (turn && MouseManager.is_Left_Btn_Released && fire != null && PlayerType==PlayerType.MyPlayer)
             {
+                SoundPlayer cannon = new SoundPlayer(@"resourcesnew\audio\cannonpop.wav");
+                cannon.Play();
                 fire.ShootFire(angle, power);
                 fired = true;
                 Console.WriteLine("--------------PLAYER-------------------");
@@ -98,6 +102,9 @@ namespace Game.GameObjects
             }
             else if(PlayerType == PlayerType.Opponent && turn&& isPowerAngle_Recieved)
             {
+
+                SoundPlayer cannon = new SoundPlayer(@"resourcesnew\audio\cannonpop.wav");
+                cannon.Play();
                 fire.ShootFire(angle, power);
                 fired = true;
                 Console.WriteLine("--------------OPPONENT-------------------");

@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Threading;
+using System.Media;
 
 namespace Game.GameObjects
 {
@@ -21,6 +22,9 @@ namespace Game.GameObjects
         public bool IsCollided { get; set; }
         public bool isFinished = false;
         Explosion explosion;
+        //SoundPlayer exp;
+        
+        
         public double Fire_Radius { get; }
         public Fire(float x, float y, FireType fireType)
             : base(x, y)
@@ -34,6 +38,8 @@ namespace Game.GameObjects
             Fire_Radius = Drawed_img.Width / 2;
             img_indx = 0;
             this.fireType = fireType;
+            
+           
         }
         public override void Draw(Graphics g)
         {
@@ -43,7 +49,11 @@ namespace Game.GameObjects
             }
             if (explosion != null && IsCollided)
             {
+                
                 explosion.Draw(g);
+                
+               
+
             }
         }
         private void Gravity(float ground_Y)
@@ -62,6 +72,7 @@ namespace Game.GameObjects
                 speedX = 0;
                 Y = ground_Y - this.Height;
                 Explode(Y);
+
             }
         }
         private void Move()
@@ -72,8 +83,14 @@ namespace Game.GameObjects
         }
         public void Explode(float y)
         {
+            
+            
+
+
             if (!IsCollided)
             {
+                SoundPlayer exp = new SoundPlayer(@"resourcesnew\audio\expmedium2.wav");
+                exp.Play();
                 if (fireType == FireType.Cutter)
                 {
                     explosion = new Explosion(X, y + 10, ExplosionType.nuke);
@@ -83,6 +100,7 @@ namespace Game.GameObjects
                     explosion = new Explosion(X, y + 5, ExplosionType.small);
                 }
 
+              
             }
             IsCollided = true;
         }
@@ -138,6 +156,7 @@ namespace Game.GameObjects
         {
             return (((this.Y - p.Y) <= p.Height) && ((this.X - p.X) <= p.Width));
         }
+        
        
     }
     class Power
