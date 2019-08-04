@@ -71,6 +71,7 @@
     <Compile Include="GamePanel.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Physics.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UDPserverClient.cs" />

@@ -8,20 +8,22 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 namespace Game
 {
-   public enum User
+    public enum User
     {
-        Host,Client
+        Host, Client
     }
     public class GamePanel : Panel
     {
         public GameForm gf { set; get; }
-        public IntroForm itf { set; get; }
+        public IntroForm introform { set; get; }
+        public int Player_Health { get; set; }
+        public int Opponent_Health { get; set; }
         public bool playerTurn = false;
         public bool opponentTurn = false;
         Player player;
         Player opponent;
         Timer gameTimer;
-        double frame_no=1;
+        double frame_no = 1;
         BricksBuilder br_build;
         User User;
         Random Random = new Random();
@@ -30,6 +32,7 @@ namespace Game
         Fire playerFire;
         Fire opponentFire;
         int latency = 50;
+        public bool isGameEnd { get; set; }
 
         public GamePanel(User user)
         {
@@ -38,6 +41,7 @@ namespace Game
             this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.GameForm_MouseDown);
             this.MouseUp += new System.Windows.Forms.MouseEventHandler(this.GameForm_MouseUp);
             this.User = user;
+
         }
         private void GameForm_MouseDown(object sender, MouseEventArgs e)
         {
@@ -59,21 +63,21 @@ namespace Game
             gameTimer.Interval = 30;
             gameTimer.Tick += GameTimer_Tick;
             gameTimer.Start();
-            br_build = new BricksBuilder(this,2);
-            if(User==User.Host)
+            br_build = new BricksBuilder(this, 2);
+            if (User == User.Host)
             {
                 player = new Player(50, br_build.Beginnig_Y - Player.Height_Player, this, PlayerType.MyPlayer);
                 player.Start_Turn();
-                opponent= new Player(this.Width-150, br_build.Beginnig_Y - Player.Height_Player, this, PlayerType.Opponent);
+                opponent = new Player(this.Width - 150, br_build.Beginnig_Y - Player.Height_Player, this, PlayerType.Opponent);
 
                 opponent_health_lbl = new Label();
-                opponent_health_lbl.Location = new Point(this.Width -330, 20);
+                opponent_health_lbl.Location = new Point(this.Width - 330, 20);
                 opponent_health_lbl.Text = ("Opponent Health: " + opponent.Health);
                 opponent_health_lbl.AutoSize = true;
                 opponent_health_lbl.Font = new Font(FontFamily.GenericMonospace, 15);
 
                 player_health_lbl = new Label();
-                player_health_lbl.Location= new Point(60,20);
+                player_health_lbl.Location = new Point(60, 20);
                 player_health_lbl.Text = ("Player Health: " + player.Health);
                 player_health_lbl.AutoSize = true;
                 player_health_lbl.Font = new Font(FontFamily.GenericMonospace, 15);
@@ -83,10 +87,11 @@ namespace Game
 
                 opponentFire = opponent.getShootedFire();
                 playerFire = player.getShootedFire();
-              
+                Player_Health = player.Health;
+                Opponent_Health = opponent.Health;
             }
 
-           else if (User == User.Client)
+            else if (User == User.Client)
             {
                 opponent = new Player(50, br_build.Beginnig_Y - Player.Height_Player, this, PlayerType.Opponent);
                 player = new Player(this.Width - 150, br_build.Beginnig_Y - Player.Height_Player, this, PlayerType.MyPlayer);
@@ -114,18 +119,18 @@ namespace Game
         public void EndGame()
         {
             gameTimer.Stop();
-
         }
         private void GameTimer_Tick(object sender, EventArgs e)
         {
-            updateGame();       
+            updateGame();
             Invalidate();
         }
         private void updateGame()
         {
             try
             {
-
+                Player_Health = player.Health;
+                Opponent_Health = opponent.Health;
                 player.Update(br_build.Beginnig_Y, frame_no);
                 opponent.Update(br_build.Beginnig_Y, frame_no);
 
@@ -134,11 +139,10 @@ namespace Game
                     if (playerFire == null)
                     {
                         EndGame();
-                        MessageBox.Show("YOU WIN!");
-                        //Application.Exit();
-                        gf.Close();
-                        itf.Show();
-
+                        if (MessageBox.Show("YOU WIN!") == DialogResult.OK)
+                        {
+                            isGameEnd = true;
+                        }            
                     }
 
                 }
@@ -147,10 +151,10 @@ namespace Game
                     if (opponentFire == null)
                     {
                         EndGame();
-                        MessageBox.Show("YOU LOOSE!");
-                        //Application.Exit();
-                        gf.Close();
-                        itf.Show();
+                        if(MessageBox.Show("YOU LOOSE!")==DialogResult.OK)
+                        {
+                            isGameEnd = true;
+                        }
                     }
                 }
 
@@ -162,7 +166,7 @@ namespace Game
                     //opponent.power = new Power(Random.Next(96, 100));
                     //opponent.angle = 113;
                     //opponent.power = new Power( 100);
-                   // opponent.isPowerAngle_Recieved = true;
+                    // opponent.isPowerAngle_Recieved = true;
                     opponentTurn = true;
                     playerTurn = false;
                 }
@@ -200,8 +204,8 @@ namespace Game
                     }
 
                 }
-                
-               
+
+
 
                 latency++;
                 if (frame_no + 1 > 10000000000)
@@ -216,7 +220,7 @@ namespace Game
 
             catch (Exception e)
             {
-                Console.WriteLine(e.Message);
+                Console.WriteLine("GamePanel GameUpdate Exception: " + e.Message);
             }
         }
         public void DrawGame(Graphics g)
@@ -239,22 +243,23 @@ namespace Game
             base.OnPaint(e);
             DrawGame(e.Graphics);
         }
-    public String getPlayerAnglePower()
-    {
-            if (player != null && player.fired && player.GetAngleAndPower()!=null)
+        public String getPlayerAnglePower()
+        {
+            if (player != null && player.fired && player.GetAngleAndPower() != null)
             {
                 return player.GetAngleAndPower();
             }
             return null;
-    }
-    public void setOpponentAnglePower(int angle,double power)
+        }
+        public void setOpponentAnglePower(int angle, double power)
         {
-            if(opponent != null)
+            if (opponent != null)
             {
                 opponent.angle = angle;
                 opponent.power = new Power(power);
                 opponent.isPowerAngle_Recieved = true;
             }
-        }
+        }      
     }
+
 }
