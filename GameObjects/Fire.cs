@@ -14,7 +14,6 @@ namespace Game.GameObjects
     {
         Image Drawed_img;
         List<Image> imgs;
-        float gravity;
         float speedY;
         float speedX;
         int img_indx;
@@ -33,8 +32,7 @@ namespace Game.GameObjects
             imgs = fim.get_fire_imgs();
             Drawed_img = imgs[0];
             base.Height = Drawed_img.Height;
-            base.Width = Drawed_img.Width;
-            gravity = 1;   
+            base.Width = Drawed_img.Width;          
             Fire_Radius = Drawed_img.Width / 2;
             img_indx = 0;
             this.fireType = fireType;
@@ -60,7 +58,7 @@ namespace Game.GameObjects
         {
             if (Y < ground_Y - Drawed_img.Height)
             {
-                speedY += gravity;
+                speedY += Physics.gravity;
                 if (Y + speedY > ground_Y - Drawed_img.Height)
                 {
                     Y = ground_Y - this.Height;
@@ -81,6 +79,7 @@ namespace Game.GameObjects
             Y += speedY;
 
         }
+       
         public void Explode(float y)
         {
             
@@ -159,7 +158,7 @@ namespace Game.GameObjects
         
        
     }
-    class Power
+    public class Power
     {
         protected double Power_Val { get; }
         private const float speed_val = 35;
