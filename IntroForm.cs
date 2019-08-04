@@ -37,51 +37,51 @@ namespace Game
         {
             Client_GroupBox.Enabled = false;
             Host_GroupBox.Enabled = false;
-           // Play_Btn.Enabled = true;
+            // Play_Btn.Enabled = true;
         }
         private void spclient_rdbutton1_CheckedChanged(object sender, EventArgs e)
         {
 
             Client_GroupBox.Enabled = false;
             Host_GroupBox.Enabled = false;
-          //  Play_Btn.Enabled = true;
+            //  Play_Btn.Enabled = true;
         }
         private void Play_Btn_Click(object sender, EventArgs e)
         {
             SoundPlayer exp = new SoundPlayer(@"resourcesnew\audio\ayyy.wav");
             exp.Play();
-                if (Host_RadioBtn.Checked)
+            if (Host_RadioBtn.Checked)
             {
-                
+
                 int portNum = int.Parse(Host_Port_TxtBox.Text);
                 GameForm gf = new GameForm(portNum, this);
                 this.Hide();
                 gf.Show();
-                
+
             }
-            else if(Client_RadioBtn.Checked)
+            else if (Client_RadioBtn.Checked)
             {
                 int portNum = int.Parse(Client_Port_TxtBox.Text);
-                String hostIP =Client_IP_TxtBox.Text;
+                String hostIP = Client_IP_TxtBox.Text;
 
                 GameForm gf = new GameForm(hostIP, portNum, this);
                 this.Hide();
                 gf.Show();
             }
-            else if(Single_RadBtn.Checked)
+            else if (Single_RadBtn.Checked)
             {
-                GameForm gf = new GameForm(this,User.Host);
+                GameForm gf = new GameForm(this, User.Host);
                 this.Hide();
                 gf.Show();
             }
             else
             {
 
-                GameForm gf = new GameForm(this,User.Client);
+                GameForm gf = new GameForm(this, User.Client);
                 this.Hide();
                 gf.Show();
             }
-           
+
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -114,11 +114,15 @@ namespace Game
         private void Host_RadioBtn_CheckedChanged_1(object sender, EventArgs e)
         {
             Play_Btn.Enabled = true;
+            Client_GroupBox.Enabled = false;
+            Host_GroupBox.Enabled = true;
         }
 
         private void Client_RadioBtn_CheckedChanged_1(object sender, EventArgs e)
         {
             Play_Btn.Enabled = true;
+            Client_GroupBox.Enabled = true;
+            Host_GroupBox.Enabled = false;
         }
 
         private void IntroForm_Load(object sender, EventArgs e)

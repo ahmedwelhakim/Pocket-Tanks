@@ -108,7 +108,7 @@ namespace Game
 
                     }
                 }
-                if (read /*&& !(gp.Player_Health<=0)&&!(gp.Opponent_Health<=0)*/)
+                if (read )
                 {
                     Console.WriteLine("reading");
                     string request = sr.ReadLine();

@@ -84,6 +84,7 @@
             this.Client_GroupBox.TabIndex = 13;
             this.Client_GroupBox.TabStop = false;
             this.Client_GroupBox.Text = "Client";
+            this.Client_GroupBox.Enabled = false;
             // 
             // label1
             // 
@@ -91,7 +92,7 @@
             this.label1.Location = new System.Drawing.Point(5, 23);
             this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(82, 13);
+            this.label1.Size = new System.Drawing.Size(83, 13);
             this.label1.TabIndex = 4;
             this.label1.Text = "Host IP address";
             // 
@@ -110,7 +111,7 @@
             this.label2.Location = new System.Drawing.Point(5, 54);
             this.label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(26, 13);
+            this.label2.Size = new System.Drawing.Size(27, 13);
             this.label2.TabIndex = 5;
             this.label2.Text = "Port";
             // 
@@ -130,9 +131,8 @@
             this.Client_RadioBtn.Location = new System.Drawing.Point(243, 18);
             this.Client_RadioBtn.Margin = new System.Windows.Forms.Padding(2);
             this.Client_RadioBtn.Name = "Client_RadioBtn";
-            this.Client_RadioBtn.Size = new System.Drawing.Size(51, 17);
+            this.Client_RadioBtn.Size = new System.Drawing.Size(52, 17);
             this.Client_RadioBtn.TabIndex = 12;
-            this.Client_RadioBtn.TabStop = true;
             this.Client_RadioBtn.Text = "Client";
             this.Client_RadioBtn.UseVisualStyleBackColor = true;
             this.Client_RadioBtn.CheckedChanged += new System.EventHandler(this.Client_RadioBtn_CheckedChanged_1);
@@ -163,13 +163,14 @@
             this.label3.Location = new System.Drawing.Point(15, 30);
             this.label3.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(26, 13);
+            this.label3.Size = new System.Drawing.Size(27, 13);
             this.label3.TabIndex = 6;
             this.label3.Text = "Port";
             // 
             // Host_RadioBtn
             // 
             this.Host_RadioBtn.AutoSize = true;
+            this.Host_RadioBtn.Checked = true;
             this.Host_RadioBtn.Location = new System.Drawing.Point(17, 18);
             this.Host_RadioBtn.Margin = new System.Windows.Forms.Padding(2);
             this.Host_RadioBtn.Name = "Host_RadioBtn";
@@ -203,7 +204,7 @@
             this.spclient_rdbutton1.Location = new System.Drawing.Point(319, 50);
             this.spclient_rdbutton1.Margin = new System.Windows.Forms.Padding(2);
             this.spclient_rdbutton1.Name = "spclient_rdbutton1";
-            this.spclient_rdbutton1.Size = new System.Drawing.Size(65, 17);
+            this.spclient_rdbutton1.Size = new System.Drawing.Size(66, 17);
             this.spclient_rdbutton1.TabIndex = 14;
             this.spclient_rdbutton1.TabStop = true;
             this.spclient_rdbutton1.Text = "sp Client";

@@ -48,7 +48,7 @@ namespace Game.GameObjects
             dashed_pen = new Pen(Color.SandyBrown, 2.7f);
             dashed_pen.DashStyle = DashStyle.Dot;
             this.PlayerType = playerType;
-            Health = 10;
+            Health = 100;
 
         }
         public void Start_Turn()

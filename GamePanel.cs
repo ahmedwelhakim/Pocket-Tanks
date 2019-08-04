@@ -127,8 +127,8 @@ namespace Game
         }
         private void updateGame()
         {
-            try
-            {
+            //try
+           // {
                 Player_Health = player.Health;
                 Opponent_Health = opponent.Health;
                 player.Update(br_build.Beginnig_Y, frame_no);
@@ -216,12 +216,12 @@ namespace Game
                 {
                     frame_no++;
                 }
-            }
+           // }
 
-            catch (Exception e)
-            {
-                Console.WriteLine("GamePanel GameUpdate Exception: " + e.Message);
-            }
+           // catch (Exception e)
+          //  {
+           //     Console.WriteLine("GamePanel GameUpdate Exception: " + e.Message);
+           // }
         }
         public void DrawGame(Graphics g)
         {
