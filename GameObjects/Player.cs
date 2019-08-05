@@ -176,7 +176,7 @@ namespace Game.GameObjects
         }
         private bool isPower_higher_lowest_val()
         {
-            return power.getPower_Val() > 35;
+            return (power.getPower_Val() > 35 &&(angle>5 && angle<175));
         }
         public Fire getShootedFire()
         {

@@ -201,7 +201,8 @@ namespace Game
                     if (mode == Mode.Single)
                     {
                         float distance = opponent.X - player.X;
-                        opponent.angle = Random.Next(100, 170);
+                        opponent.angle = Random.Next(100, 168);
+
                         for (int i = 40; i <= 100; i++)
                         {
                             float fire_x = Physics.Range(opponent.angle, new Power(i).getSpeedMagnitude(), opponent);
