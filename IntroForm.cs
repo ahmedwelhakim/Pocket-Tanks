@@ -50,7 +50,7 @@ namespace Game
         {
             SoundPlayer exp = new SoundPlayer(@"resourcesnew\audio\ayyy.wav");
             exp.Play();
-            if (Host_RadioBtn.Checked)
+            if (Host_RadioBtn.Checked && Host_GroupBox.Enabled)
             {
 
                 int portNum = int.Parse(Host_Port_TxtBox.Text);
@@ -59,7 +59,7 @@ namespace Game
                 gf.Show();
 
             }
-            else if (Client_RadioBtn.Checked)
+            else if (Client_RadioBtn.Checked && Client_GroupBox.Enabled)
             {
                 int portNum = int.Parse(Client_Port_TxtBox.Text);
                 String hostIP = Client_IP_TxtBox.Text;
@@ -68,13 +68,13 @@ namespace Game
                 this.Hide();
                 gf.Show();
             }
-            else if (Single_RadBtn.Checked)
+            else if (Single_RadBtn.Checked && SinglePlayer_groupBox.Enabled)
             {
                 GameForm gf = new GameForm(this, User.Host);
                 this.Hide();
                 gf.Show();
             }
-            else
+            else if(SinglePlayer_groupBox.Enabled && spclient_rdbutton1.Checked)
             {
 
                 GameForm gf = new GameForm(this, User.Client);
@@ -86,8 +86,11 @@ namespace Game
 
         private void button1_Click(object sender, EventArgs e)
         {
+            SinglePlayer_groupBox.Enabled=false;
             SinglePlayer_groupBox.Hide();
             Multiplayer_groupBox.Show();
+            Multiplayer_groupBox.Enabled = true;
+            Play_Btn.Enabled = true;
         }
 
         private void groupBox1_Enter(object sender, EventArgs e)
@@ -102,8 +105,11 @@ namespace Game
 
         private void Singleplayer_Click(object sender, EventArgs e)
         {
+            SinglePlayer_groupBox.Enabled = true;
             SinglePlayer_groupBox.Show();
+            Multiplayer_groupBox.Enabled = false;
             Multiplayer_groupBox.Hide();
+            Play_Btn.Enabled = true;
         }
 
         private void Single_RadBtn_CheckedChanged_1(object sender, EventArgs e)

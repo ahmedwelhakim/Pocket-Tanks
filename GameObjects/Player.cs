@@ -18,11 +18,11 @@ namespace Game.GameObjects
     class Player : GameObject
     {
         private static int moves = 5;  //each tank starts a new game with 5 available moves 
-        static Image Player_Image = Image.FromFile(@"resourcesnew\Tank1\Tank1.png");
-        public static float Width_Player = Player_Image.Width;
-        public static float Height_Player = Player_Image.Height;
+        private Image Player_Image;// = Image.FromFile(@"resourcesnew\tank1\tank1.png");
+        public  float Width_Player;// = Player_Image.Width;
+        public  float Height_Player;// = Player_Image.Height;
         public GamePanel gp;
-        Label lbl = new Label();
+        //Label lbl = new Label();
         Pen pen;
         Pen dashed_pen;
         PlayerType PlayerType;
@@ -41,9 +41,23 @@ namespace Game.GameObjects
 
         public Player(float x, float y, GamePanel gp, PlayerType playerType) : base(x, y)
         {
+            
+            if (playerType == PlayerType.Opponent)
+            {
+                Player_Image = Image.FromFile(@"resourcesnew\tank2\tank1.png");
+            }
+            else
+            {
+                Player_Image = Image.FromFile(@"resourcesnew\tank1\tank1.png");
+            }
+            Y -= Player_Image.Height;
             base.Height = Player_Image.Height;
             base.Width = Player_Image.Width;
             this.gp = gp;
+            if(X>gp.Width/2)
+            {
+                angle = 120; 
+            }
             pen = new Pen(Color.FromArgb(80, 68, 22), 5);
             dashed_pen = new Pen(Color.SandyBrown, 2.7f);
             dashed_pen.DashStyle = DashStyle.Dot;
@@ -59,12 +73,13 @@ namespace Game.GameObjects
             MouseManager.is_Left_Btn_Released = false;
             if (turns_count % 2 == 0)
             {
-                fire = new Fire((X + (Width_Player / 2) - 19), Y - 10, FireType.Single_Shot);
+                fire = new Fire((X + (Width / 2) - 19), Y - 10, FireType.Single_Shot);
             }
             else
             {
-                fire = new Fire((X + (Width_Player / 2) - 19), Y - 10, FireType.Cutter);
+                fire = new Fire((X + (Width / 2) - 19), Y - 10, FireType.Cutter);
             }
+                fire.X += fire.Width / 2;
             turns_count++;
 
         }
@@ -88,7 +103,7 @@ namespace Game.GameObjects
         }
         public void Shoot()
         {
-            if (turn && MouseManager.is_Left_Btn_Released && fire != null && PlayerType == PlayerType.MyPlayer)
+            if (turn && MouseManager.is_Left_Btn_Released && fire != null && PlayerType == PlayerType.MyPlayer && isPower_higher_lowest_val())
             {
                 SoundPlayer cannon = new SoundPlayer(@"resourcesnew\audio\cannonpop.wav");
                 cannon.Play();
@@ -101,7 +116,7 @@ namespace Game.GameObjects
                 Console.WriteLine(fire);
                 Console.WriteLine("------------------------------------");
 
-                gp.Controls.Remove(lbl);
+                // gp.Controls.Remove(lbl);
                 turn = false;
             }
             else if (PlayerType == PlayerType.Opponent && turn && isPowerAngle_Recieved)
@@ -118,22 +133,20 @@ namespace Game.GameObjects
                 Console.WriteLine(fire);
                 Console.WriteLine("------------------------------------");
 
-                gp.Controls.Remove(lbl);
+                // gp.Controls.Remove(lbl);
                 turn = false;
             }
-
+            else if (MouseManager.is_Left_Btn_Released==true && fired==false)
+            {
+                MouseManager.is_Left_Btn_Released = false;
+            }
         }
         public void Update(float ground_Y, double frame_no)
         {
             if (MouseManager.getMouseState(MouseButtons.Left) && turn && PlayerType == PlayerType.MyPlayer)
             {
-                gp.Controls.Add(lbl);
                 Calc_Angle_Power();
                 int power_val = (int)power.getPower_Val();
-                lbl.Text = ("Angle: " + angle + "\nPower: " + power_val);
-                lbl.AutoSize = true;
-                lbl.Font = new Font(FontFamily.GenericMonospace, 15);
-                lbl.Location = new Point((int)X, (int)Y - 70);
             }
             Shoot();
             if (fire != null && fired)
@@ -160,6 +173,10 @@ namespace Game.GameObjects
             double angle_degree = Math.Atan2(-distY, distX) * (180.0 / Math.PI);
             angle = (int)angle_degree;
             power = new Power((dist_Magn / Max_Dist) * 100);
+        }
+        private bool isPower_higher_lowest_val()
+        {
+            return power.getPower_Val() > 35;
         }
         public Fire getShootedFire()
         {
@@ -190,7 +207,7 @@ namespace Game.GameObjects
         {
             const int len = 30;
             double angle_rad = angle * (Math.PI / 180.0);
-            float x1 = X + Width_Player / 2;
+            float x1 = X + Width / 2;
             float y1 = Y;
             float x2 = x1 + (float)(len * Math.Cos(angle_rad));
             float y2 = y1 - (float)(len * Math.Sin(angle_rad));
@@ -208,16 +225,10 @@ namespace Game.GameObjects
             g.DrawImage(Player_Image, new PointF(X, Y));
             DrawTankPipe(g);
 
-            if (MouseManager.getMouseState(MouseButtons.Left) && turn && PlayerType == PlayerType.MyPlayer)
+            if (MouseManager.getMouseState(MouseButtons.Left) && turn && PlayerType == PlayerType.MyPlayer && isPower_higher_lowest_val())
             {
-                //int x1 = MouseManager.X;
-                //int y1 = MouseManager.Y;
-                //float x2 = gp.PointToClient(Cursor.Position).X;
-                //float y2 = gp.PointToClient(Cursor.Position).Y;
-                //g.DrawLine(dashed_pen, new PointF(x1, y1), new PointF(x2, y2));
-
-                Physics.DrawFirePath(angle, ground_Y, power, this, g);
-            } 
+                Physics.DrawFirePath_movingBalls(angle, ground_Y, power, this, g);
+            }
 
 
 

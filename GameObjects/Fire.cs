@@ -20,7 +20,7 @@ namespace Game.GameObjects
         FireType fireType;
         public bool IsCollided { get; set; }
         public bool isFinished = false;
-        Explosion explosion;
+        public Explosion explosion { get; set; }
         //SoundPlayer exp;
         
         
@@ -161,7 +161,7 @@ namespace Game.GameObjects
     public class Power
     {
         protected double Power_Val { get; }
-        private const float speed_val = 35;
+        private const float speed_val = 36;
         public Power(double pow)
         {
             if (pow > 100)

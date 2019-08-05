@@ -27,11 +27,16 @@ namespace Game
         BricksBuilder br_build;
         User User;
         Random Random = new Random();
-        Label player_health_lbl;
-        Label opponent_health_lbl;
+        //Label player_health_lbl;
+        //Label opponent_health_lbl;
+        Label turn_lbl;
         Fire playerFire;
         Fire opponentFire;
-        int latency = 50;
+        Brush black_brush;
+        Brush green_brush;
+        Pen healthBar_pen = new Pen(Color.Black, 3);
+        double latency = 50;
+
         public bool isGameEnd { get; set; }
 
         public GamePanel(User user)
@@ -64,27 +69,29 @@ namespace Game
             gameTimer.Tick += GameTimer_Tick;
             gameTimer.Start();
             br_build = new BricksBuilder(this, 2);
+            black_brush = new SolidBrush(Color.FromArgb(240,10,10,10));
+            //black_brush = Brushes.Black;
+            green_brush = new SolidBrush(Color.FromArgb(255,0,230,10));
+            //green_brush = Brushes.Green;
+            healthBar_pen = new Pen(Color.Black, 2.3f);
+            turn_lbl = new Label()
+            {
+                AutoSize = true,
+                TextAlign = ContentAlignment.MiddleCenter,
+                Dock = DockStyle.None,
+                Font = new Font(FontFamily.GenericSerif, 20),
+               
+        };
+            turn_lbl.SizeChanged += Turn_lbl_SizeChanged;
+            turn_lbl.Location = new Point(this.Width / 2 - turn_lbl.Width / 2, 30);
+            this.Controls.Add(turn_lbl);
             if (User == User.Host)
             {
-                player = new Player(50, br_build.Beginnig_Y - Player.Height_Player, this, PlayerType.MyPlayer);
+                player = new Player(50, br_build.Beginnig_Y , this, PlayerType.MyPlayer);
                 player.Start_Turn();
-                opponent = new Player(this.Width - 150, br_build.Beginnig_Y - Player.Height_Player, this, PlayerType.Opponent);
-
-                opponent_health_lbl = new Label();
-                opponent_health_lbl.Location = new Point(this.Width - 330, 20);
-                opponent_health_lbl.Text = ("Opponent Health: " + opponent.Health);
-                opponent_health_lbl.AutoSize = true;
-                opponent_health_lbl.Font = new Font(FontFamily.GenericMonospace, 15);
-
-                player_health_lbl = new Label();
-                player_health_lbl.Location = new Point(60, 20);
-                player_health_lbl.Text = ("Player Health: " + player.Health);
-                player_health_lbl.AutoSize = true;
-                player_health_lbl.Font = new Font(FontFamily.GenericMonospace, 15);
-
-                this.Controls.Add(player_health_lbl);
-                this.Controls.Add(opponent_health_lbl);
-
+                opponent = new Player(this.Width -player.Width -50, br_build.Beginnig_Y , this, PlayerType.Opponent);
+                playerTurn = true;
+              
                 opponentFire = opponent.getShootedFire();
                 playerFire = player.getShootedFire();
                 Player_Health = player.Health;
@@ -93,29 +100,20 @@ namespace Game
 
             else if (User == User.Client)
             {
-                opponent = new Player(50, br_build.Beginnig_Y - Player.Height_Player, this, PlayerType.Opponent);
-                player = new Player(this.Width - 150, br_build.Beginnig_Y - Player.Height_Player, this, PlayerType.MyPlayer);
+                opponent = new Player(50, br_build.Beginnig_Y , this, PlayerType.Opponent);
+                player = new Player(this.Width - opponent.Width - 50, br_build.Beginnig_Y , this, PlayerType.MyPlayer);
                 opponent.Start_Turn();
-
-                opponent_health_lbl = new Label();
-                opponent_health_lbl.Location = new Point(this.Width - 330, 20);
-                opponent_health_lbl.Text = ("Opponent Health: " + opponent.Health);
-                opponent_health_lbl.AutoSize = true;
-                opponent_health_lbl.Font = new Font(FontFamily.GenericMonospace, 15);
-
-                player_health_lbl = new Label();
-                player_health_lbl.Location = new Point(60, 20);
-                player_health_lbl.Text = ("Player Health: " + player.Health);
-                player_health_lbl.AutoSize = true;
-                player_health_lbl.Font = new Font(FontFamily.GenericMonospace, 15);
-
-                this.Controls.Add(player_health_lbl);
-                this.Controls.Add(opponent_health_lbl);
-
+             
                 opponentFire = opponent.getShootedFire();
                 playerFire = player.getShootedFire();
             }
         }
+
+        private void Turn_lbl_SizeChanged(object sender, EventArgs e)
+        {
+            turn_lbl.Left = this.ClientSize.Width/2 - turn_lbl.Size.Width / 2;
+        }
+
         public void EndGame()
         {
             gameTimer.Stop();
@@ -127,13 +125,13 @@ namespace Game
         }
         private void updateGame()
         {
-            //try
-           // {
+            try
+            {
                 Player_Health = player.Health;
                 Opponent_Health = opponent.Health;
                 player.Update(br_build.Beginnig_Y, frame_no);
                 opponent.Update(br_build.Beginnig_Y, frame_no);
-
+                
                 if (opponent.Health <= 0)
                 {
                     if (playerFire == null)
@@ -144,7 +142,7 @@ namespace Game
                             isGameEnd = true;
                         }            
                     }
-
+                    
                 }
                 if (player.Health <= 0)
                 {
@@ -157,7 +155,14 @@ namespace Game
                         }
                     }
                 }
-
+                if(playerTurn)
+                {
+                    turn_lbl.Text = "Your Turn!";
+                }
+                else
+                {
+                    turn_lbl.Text = "Opponent Turn";
+                }
                 if (player.isTurnFinished())
                 {
                     player.End_Turn();
@@ -178,26 +183,26 @@ namespace Game
                     opponentTurn = false;
                 }
 
-                opponent_health_lbl.Text = ("Opponent Health: " + opponent.Health);
-                player_health_lbl.Text = ("Player Health: " + player.Health);
+                //opponent_health_lbl.Text = ("Opponent Health: " + opponent.Health);
+                //player_health_lbl.Text = ("Player Health: " + player.Health);
 
                 //updating the fire of every player
                 opponentFire = opponent.getShootedFire();
                 playerFire = player.getShootedFire();
 
                 //Check collisions of fire with tanks to lower health
-                if (playerFire != null && latency >= 50)
+                if (playerFire != null && latency >= 50 && playerFire.explosion != null)
                 {
-                    if (GameObject.checkCollision(opponent, playerFire))
+                    if (GameObject.checkCollision(opponent, playerFire.explosion))
                     {
                         opponent.Health -= 20;
                         latency = 0;
                     }
 
                 }
-                if (opponentFire != null && latency >= 50)
+                if (opponentFire != null && latency >= 50 && opponentFire.explosion!=null)
                 {
-                    if (GameObject.checkCollision(player, opponentFire))
+                    if (GameObject.checkCollision(player, opponentFire.explosion))
                     {
                         player.Health -= 20;
                         latency = 0;
@@ -216,22 +221,24 @@ namespace Game
                 {
                     frame_no++;
                 }
-           // }
+            }
 
-           // catch (Exception e)
-          //  {
-           //     Console.WriteLine("GamePanel GameUpdate Exception: " + e.Message);
-           // }
+            catch (Exception e)
+            {
+                Console.WriteLine("GamePanel GameUpdate Exception: " + e.Message);
+            }
         }
         public void DrawGame(Graphics g)
         {
             try
             {
                 br_build.draw(g);
+                DrawHealthBar(g);
                 player.Draw(g);
                 opponent.Draw(g);
                 player.DrawFire(g);
                 opponent.DrawFire(g);
+                
             }
             catch (Exception e)
             {
@@ -250,6 +257,16 @@ namespace Game
                 return player.GetAngleAndPower();
             }
             return null;
+        }
+        private void DrawHealthBar(Graphics g)
+        {
+            g.FillRectangle(black_brush, new RectangleF(player.X, player.Y - 50, player.Width, 12));
+            g.FillRectangle(green_brush, new RectangleF(player.X, player.Y - 50, player.Width * (player.Health / 100.0F), 12));
+            g.DrawRectangle(healthBar_pen, new Rectangle((int)player.X, (int)player.Y - 50, (int)player.Width, 12));
+
+            g.FillRectangle(black_brush, new RectangleF(opponent.X, opponent.Y - 50, opponent.Width, 12));
+            g.FillRectangle(green_brush, new RectangleF(opponent.X, opponent.Y - 50, opponent.Width * (opponent.Health / 100.0F), 12));
+            g.DrawRectangle(healthBar_pen, new Rectangle((int)opponent.X, (int)opponent.Y - 50, (int)opponent.Width, 12));
         }
         public void setOpponentAnglePower(int angle, double power)
         {

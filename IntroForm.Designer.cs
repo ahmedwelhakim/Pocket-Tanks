@@ -78,13 +78,13 @@
             this.Client_GroupBox.Controls.Add(this.Client_IP_TxtBox);
             this.Client_GroupBox.Controls.Add(this.label2);
             this.Client_GroupBox.Controls.Add(this.Client_Port_TxtBox);
+            this.Client_GroupBox.Enabled = false;
             this.Client_GroupBox.Location = new System.Drawing.Point(243, 37);
             this.Client_GroupBox.Name = "Client_GroupBox";
             this.Client_GroupBox.Size = new System.Drawing.Size(219, 100);
             this.Client_GroupBox.TabIndex = 13;
             this.Client_GroupBox.TabStop = false;
             this.Client_GroupBox.Text = "Client";
-            this.Client_GroupBox.Enabled = false;
             // 
             // label1
             // 

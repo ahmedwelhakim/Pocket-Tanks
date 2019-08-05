@@ -86,7 +86,10 @@ namespace Game.GameObjects
                         isFinished = true;
                     }
                     Drawed_img = imgs[img_indx];
+                    Height = imgs[img_indx].Height;
+                    Width = imgs[img_indx].Width;
                     Y -= (int)(Drawed_img.Height - old_Height) / 2;
+                    X -= (int)(Drawed_img.Height - old_Height) / 2;
                 }
             }
             else
@@ -103,7 +106,10 @@ namespace Game.GameObjects
                         isFinished = true;
                     }
                     Drawed_img = imgs[img_indx];
+                    Height = imgs[img_indx].Height;
+                    Width = imgs[img_indx].Width;
                     Y -= (int)(Drawed_img.Height - old_Height) / 2;
+                    X -= (int)(Drawed_img.Height - old_Height) / 2;
                 }
             }
         }
