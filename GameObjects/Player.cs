@@ -222,13 +222,13 @@ namespace Game.GameObjects
         }
         public override void Draw(Graphics g)
         {
-            g.DrawImage(Player_Image, new PointF(X, Y));
-            DrawTankPipe(g);
 
             if (MouseManager.getMouseState(MouseButtons.Left) && turn && PlayerType == PlayerType.MyPlayer && isPower_higher_lowest_val())
             {
                 Physics.DrawFirePath_movingBalls(angle, ground_Y, power, this, g);
             }
+            g.DrawImage(Player_Image, new PointF(X, Y));
+            DrawTankPipe(g);
 
 
 

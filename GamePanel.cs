@@ -12,6 +12,10 @@ namespace Game
     {
         Host, Client
     }
+    public enum Mode
+    {
+        Single, Multi
+    }
     public class GamePanel : Panel
     {
         public GameForm gf { set; get; }
@@ -36,17 +40,17 @@ namespace Game
         Brush green_brush;
         Pen healthBar_pen = new Pen(Color.Black, 3);
         double latency = 50;
-
+        Mode mode;
         public bool isGameEnd { get; set; }
 
-        public GamePanel(User user)
+        public GamePanel(User user, Mode mode)
         {
             this.DoubleBuffered = true;
             this.Dock = DockStyle.Fill;
             this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.GameForm_MouseDown);
             this.MouseUp += new System.Windows.Forms.MouseEventHandler(this.GameForm_MouseUp);
             this.User = user;
-
+            this.mode = mode;
         }
         private void GameForm_MouseDown(object sender, MouseEventArgs e)
         {
@@ -69,9 +73,9 @@ namespace Game
             gameTimer.Tick += GameTimer_Tick;
             gameTimer.Start();
             br_build = new BricksBuilder(this, 2);
-            black_brush = new SolidBrush(Color.FromArgb(240,10,10,10));
+            black_brush = new SolidBrush(Color.FromArgb(240, 10, 10, 10));
             //black_brush = Brushes.Black;
-            green_brush = new SolidBrush(Color.FromArgb(255,0,230,10));
+            green_brush = new SolidBrush(Color.FromArgb(255, 0, 230, 10));
             //green_brush = Brushes.Green;
             healthBar_pen = new Pen(Color.Black, 2.3f);
             turn_lbl = new Label()
@@ -80,18 +84,18 @@ namespace Game
                 TextAlign = ContentAlignment.MiddleCenter,
                 Dock = DockStyle.None,
                 Font = new Font(FontFamily.GenericSerif, 20),
-               
-        };
+
+            };
             turn_lbl.SizeChanged += Turn_lbl_SizeChanged;
             turn_lbl.Location = new Point(this.Width / 2 - turn_lbl.Width / 2, 30);
             this.Controls.Add(turn_lbl);
             if (User == User.Host)
             {
-                player = new Player(50, br_build.Beginnig_Y , this, PlayerType.MyPlayer);
+                player = new Player(50, br_build.Beginnig_Y, this, PlayerType.MyPlayer);
                 player.Start_Turn();
-                opponent = new Player(this.Width -player.Width -50, br_build.Beginnig_Y , this, PlayerType.Opponent);
+                opponent = new Player(this.Width - player.Width - 50, br_build.Beginnig_Y, this, PlayerType.Opponent);
                 playerTurn = true;
-              
+
                 opponentFire = opponent.getShootedFire();
                 playerFire = player.getShootedFire();
                 Player_Health = player.Health;
@@ -100,10 +104,10 @@ namespace Game
 
             else if (User == User.Client)
             {
-                opponent = new Player(50, br_build.Beginnig_Y , this, PlayerType.Opponent);
-                player = new Player(this.Width - opponent.Width - 50, br_build.Beginnig_Y , this, PlayerType.MyPlayer);
+                opponent = new Player(50, br_build.Beginnig_Y, this, PlayerType.Opponent);
+                player = new Player(this.Width - opponent.Width - 50, br_build.Beginnig_Y, this, PlayerType.MyPlayer);
                 opponent.Start_Turn();
-             
+
                 opponentFire = opponent.getShootedFire();
                 playerFire = player.getShootedFire();
             }
@@ -111,12 +115,21 @@ namespace Game
 
         private void Turn_lbl_SizeChanged(object sender, EventArgs e)
         {
-            turn_lbl.Left = this.ClientSize.Width/2 - turn_lbl.Size.Width / 2;
+            turn_lbl.Left = this.ClientSize.Width / 2 - turn_lbl.Size.Width / 2;
         }
 
         public void EndGame()
         {
-            gameTimer.Stop();
+            
+         
+                isGameEnd = true;
+                if (mode == Mode.Single)
+                {
+                  
+                    gf.Close();
+                    introform.Show();
+                }
+            
         }
         private void GameTimer_Tick(object sender, EventArgs e)
         {
@@ -131,47 +144,79 @@ namespace Game
                 Opponent_Health = opponent.Health;
                 player.Update(br_build.Beginnig_Y, frame_no);
                 opponent.Update(br_build.Beginnig_Y, frame_no);
-                
+
                 if (opponent.Health <= 0)
                 {
                     if (playerFire == null)
                     {
-                        EndGame();
+                        gameTimer.Stop();
                         if (MessageBox.Show("YOU WIN!") == DialogResult.OK)
                         {
+                            EndGame();
                             isGameEnd = true;
-                        }            
+                        }
+
                     }
-                    
+
                 }
                 if (player.Health <= 0)
                 {
                     if (opponentFire == null)
                     {
-                        EndGame();
-                        if(MessageBox.Show("YOU LOOSE!")==DialogResult.OK)
+                        gameTimer.Stop();
+                        if (MessageBox.Show("YOU LOOSE!") == DialogResult.OK)
                         {
+
+                            EndGame();
                             isGameEnd = true;
                         }
                     }
                 }
-                if(playerTurn)
+                if (playerTurn)
                 {
-                    turn_lbl.Text = "Your Turn!";
+                    if (player.Health <= 0 || opponent.Health <= 0)
+                    {
+                        turn_lbl.Text = "Game Ended";
+                    }
+                    else
+                    {
+                        turn_lbl.Text = "Your Turn!";
+                    }
                 }
                 else
                 {
-                    turn_lbl.Text = "Opponent Turn";
+                    if (player.Health <= 0 || opponent.Health <= 0)
+                    {
+                        turn_lbl.Text = "Game Ended";
+                    }
+                    else
+                    {
+                        turn_lbl.Text = "Opponent Turn";
+                    }
                 }
                 if (player.isTurnFinished())
                 {
                     player.End_Turn();
                     opponent.Start_Turn();
-                    //opponent.angle = Random.Next(111, 115);
-                    //opponent.power = new Power(Random.Next(96, 100));
-                    //opponent.angle = 113;
-                    //opponent.power = new Power( 100);
-                    // opponent.isPowerAngle_Recieved = true;
+                    if (mode == Mode.Single)
+                    {
+                        float distance = opponent.X - player.X;
+                        opponent.angle = Random.Next(100, 170);
+                        for (int i = 40; i <= 100; i++)
+                        {
+                            float fire_x = Physics.Range(opponent.angle, new Power(i).getSpeedMagnitude(), opponent);
+                            if (i == 100)
+                            {
+                                opponent.power = new Power(100);
+                            }
+                            else if (fire_x - player.X - player.Width <= 10)
+                            {
+                                opponent.power = new Power(i);
+                                i = 110;
+                            }
+                        }
+                        opponent.isPowerAngle_Recieved = true;
+                    }
                     opponentTurn = true;
                     playerTurn = false;
                 }
@@ -200,7 +245,7 @@ namespace Game
                     }
 
                 }
-                if (opponentFire != null && latency >= 50 && opponentFire.explosion!=null)
+                if (opponentFire != null && latency >= 50 && opponentFire.explosion != null)
                 {
                     if (GameObject.checkCollision(player, opponentFire.explosion))
                     {
@@ -238,7 +283,7 @@ namespace Game
                 opponent.Draw(g);
                 player.DrawFire(g);
                 opponent.DrawFire(g);
-                
+
             }
             catch (Exception e)
             {
@@ -276,7 +321,7 @@ namespace Game
                 opponent.power = new Power(power);
                 opponent.isPowerAngle_Recieved = true;
             }
-        }      
+        }
     }
 
 }

@@ -18,19 +18,19 @@ namespace Game
         static float z_lw90 = 0;
         static float z_hi90 = 0;
         static float z_90 = 0;
-        private static float PathEquation(float x, double angle, double speed_mag, float ground_Y, Player player)
+        public static float PathEquation(float x, double angle, double speed_mag, float ground_Y, Player player)
         {
             double angle_rad = angle * Math.PI / 180.0;
             float tankX = player.X + player.Width / 2;
             float y = (float)-((x - tankX) * Math.Tan(angle_rad) - ((Physics.gravity * Math.Pow(x - tankX, 2)) / (2 * Math.Pow(speed_mag, 2) * Math.Pow(Math.Cos(angle_rad), 2))));
             return y + ground_Y - player.Height;
         }
-        private static float MaxHeight(double angle, double speed_mag)
+        public static float MaxHeight(double angle, double speed_mag)
         {
             double angle_rad = angle * Math.PI / 180.0;
             return (float)((Math.Pow(speed_mag, 2) * Math.Pow(Math.Sin(angle_rad), 2)) / 2 * gravity);
         }
-        private static float Range(double angle, double speed_mag, Player player)
+        public static float Range(double angle, double speed_mag, Player player)
         {
             double angle_rad = angle * Math.PI / 180.0;
             float tankX = player.X + player.Width / 2;
@@ -92,7 +92,7 @@ namespace Game
                         size = 7 * ratio + 3;
                         circles.Add(new RectangleF(i - size / 2, Physics.PathEquation(i, angle, power.getSpeedMagnitude(), ground_Y, player) - size / 2, size, size));
                         i += range / 20f;
-                        z_lw90 += range / (20 * 200);
+                        z_lw90 += range / (15 * 200);
                         if (z_lw90 > range / 20)
                         {
                             z_lw90 = 0;
@@ -109,7 +109,7 @@ namespace Game
                         float size = 7 * ratio + 3;
                         circles.Add(new RectangleF(i - size / 2, Physics.PathEquation(i, angle, power.getSpeedMagnitude(), ground_Y, player) - size / 2, size, size));
                         i += range / 20f;
-                        z_hi90 += range / (20 * 200);
+                        z_hi90 += range / (15 * 200);
                         if (z_hi90 < range / 20)
                         {
                             z_hi90 = 0;
@@ -132,7 +132,7 @@ namespace Game
                         size = 7 * ratio + 3;
                         circles.Add(new RectangleF(player.X+player.Width/2 -size/2.0f, i, size, size));
                         i -= len / 20f;
-                        z_90 += len / (20 * 200);
+                        z_90 += len / (15 * 200);
                         if (z_90 > len / 20)
                         {
                             z_90 = 0;

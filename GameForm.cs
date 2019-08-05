@@ -30,7 +30,7 @@ namespace Game
         public GameForm(IntroForm introform, User user)       //SinglePlayer Constructor
         {
             InitializeComponent();
-            this.gp = new GamePanel(user);
+            this.gp = new GamePanel(user,Mode.Single);
             gp.gf = this;
             gp.introform = introform;
             Controls.Add(gp);
@@ -40,7 +40,7 @@ namespace Game
         {
             InitializeComponent();
             this.IntroForm = introForm;
-            this.gp = new GamePanel(User.Host);
+            this.gp = new GamePanel(User.Host,Mode.Multi);
             Controls.Add(gp);
             gp.StartGame();
             user = User.Host;
@@ -52,7 +52,7 @@ namespace Game
         {
             InitializeComponent();
             this.IntroForm = introForm;
-            gp = new GamePanel(User.Client);
+            gp = new GamePanel(User.Client,Mode.Multi);
             Controls.Add(gp);
             gp.StartGame();
             user = User.Client;
@@ -66,7 +66,7 @@ namespace Game
             TcpListener listener = TcpListener.Create(myPortNumber);
             listener.Start();
             communicator = listener.AcceptTcpClient();
-            Console.WriteLine("ClientACCEPTED");
+            Console.WriteLine("Communication accepted");
             sr = new StreamReader(communicator.GetStream());
             sw = new StreamWriter(communicator.GetStream());
             t = new Thread(communicate);
@@ -91,7 +91,6 @@ namespace Game
                 {
                     if ((gp.getPlayerAnglePower() != null))
                     {
-                        Console.WriteLine("writing");
                         sw.WriteLine(gp.getPlayerAnglePower());
                         sw.Flush();
                         read = true;
@@ -99,7 +98,6 @@ namespace Game
                     }
                     else if(gp.isGameEnd )
                     {
-                        Console.WriteLine("writing GameEnded");
                         sw.WriteLine("GameEnded");
                         sw.Flush();
                         read = false;
@@ -110,9 +108,7 @@ namespace Game
                 }
                 if (read )
                 {
-                    Console.WriteLine("reading");
                     string request = sr.ReadLine();
-                    Console.WriteLine("Request = "+request);
                     if (request != null && request!="GameEnded")
                     {
                         string[] tokens = request.Split(' ');
@@ -135,18 +131,14 @@ namespace Game
         }
         private void EndGame()
         {
-            Console.WriteLine("Ending Game");
             sr.Close();
             sw.Close();
             communicator.Close();
             communicating = false;
             write = false;
             read = false;
-            Console.WriteLine("GAME ENDED");
             this.Close();
             IntroForm.Show();
-            Console.WriteLine("IntroForm Opened");
-            Console.WriteLine("Aborting thread");
             t.Abort();
         }
 
