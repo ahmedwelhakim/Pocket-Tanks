@@ -73,6 +73,10 @@ namespace Game.GameObjects
 
             }
         }
+        public FireType getFireType()
+        {
+            return fireType;
+        }
         private void Move()
         {
             X += speedX;

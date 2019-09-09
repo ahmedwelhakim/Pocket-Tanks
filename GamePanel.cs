@@ -39,6 +39,10 @@ namespace Game
         Brush black_brush;
         Brush green_brush;
         Pen healthBar_pen = new Pen(Color.Black, 3);
+        int Player_R;// = (int)(255 *(1- player_health_percent));
+        int Player_G;//= (int)(255* (player_health_percent));
+        int Opponent_R;//= (int)(255 * (1 - opp_health_percent));
+        int Opponent_G;//= (int)(255 * (opp_health_percent));
         double latency = 50;
         Mode mode;
         public bool isGameEnd { get; set; }
@@ -119,17 +123,13 @@ namespace Game
         }
 
         public void EndGame()
-        {
-            
-         
+        {         
                 isGameEnd = true;
                 if (mode == Mode.Single)
-                {
-                  
+                {         
                     gf.Close();
                     introform.Show();
                 }
-            
         }
         private void GameTimer_Tick(object sender, EventArgs e)
         {
@@ -241,7 +241,18 @@ namespace Game
                 {
                     if (GameObject.checkCollision(opponent, playerFire.explosion))
                     {
-                        opponent.Health -= 20;
+                        if(playerFire.getFireType()==FireType.Cutter)
+                        {
+                            opponent.Health -= 20;
+                        }
+                        else
+                        {
+                            opponent.Health -= 10;
+                        }
+                        if (opponent.Health < 0)
+                        {
+                            opponent.Health = 0;
+                        }
                         latency = 0;
                     }
 
@@ -250,7 +261,18 @@ namespace Game
                 {
                     if (GameObject.checkCollision(player, opponentFire.explosion))
                     {
-                        player.Health -= 20;
+                        if (opponentFire.getFireType() == FireType.Cutter)
+                        {
+                            player.Health -= 20;
+                        }
+                        else
+                        {
+                            player.Health -= 10;
+                        }
+                        if(player.Health<0)
+                        {
+                            player.Health = 0;
+                        }
                         latency = 0;
                     }
 
@@ -304,16 +326,45 @@ namespace Game
             }
             return null;
         }
+        private void CalcHealthBarColor()
+        {
+            if (opponent.Health >= 50)
+            {
+                Opponent_G = 200;
+                Opponent_R = (int)(255 * (1 - (opponent.Health - 50) / 50.0));
+            }
+            else
+            {
+                Opponent_G = (int)(255 * Math.Pow((opponent.Health / 50.0), 2.2));
+                Opponent_R = 255;
+            }
+
+            if (player.Health >= 50)
+            {
+                Player_G = 200;
+                Player_R = (int)(255 * (1 - (player.Health - 50) / 50.0));
+            }
+            else
+            {
+                Player_G = (int)(255 * Math.Pow((player.Health / 50.0), 2.2));
+                Player_R = 255;
+            }
+
+        }
         private void DrawHealthBar(Graphics g)
         {
+            CalcHealthBarColor();
+
             g.FillRectangle(black_brush, new RectangleF(player.X, player.Y - 50, player.Width, 12));
-            g.FillRectangle(green_brush, new RectangleF(player.X, player.Y - 50, player.Width * (player.Health / 100.0F), 12));
+            g.FillRectangle(new SolidBrush(Color.FromArgb(Player_R,Player_G,0)), new RectangleF(player.X, player.Y - 50, player.Width * (player.Health / 100.0F), 12));
             g.DrawRectangle(healthBar_pen, new Rectangle((int)player.X, (int)player.Y - 50, (int)player.Width, 12));
 
             g.FillRectangle(black_brush, new RectangleF(opponent.X, opponent.Y - 50, opponent.Width, 12));
-            g.FillRectangle(green_brush, new RectangleF(opponent.X, opponent.Y - 50, opponent.Width * (opponent.Health / 100.0F), 12));
+            g.FillRectangle(new SolidBrush(Color.FromArgb(Opponent_R,Opponent_G,0)), new RectangleF(opponent.X, opponent.Y - 50, opponent.Width * (opponent.Health / 100.0F), 12));
             g.DrawRectangle(healthBar_pen, new Rectangle((int)opponent.X, (int)opponent.Y - 50, (int)opponent.Width, 12));
+
         }
+
         public void setOpponentAnglePower(int angle, double power)
         {
             if (opponent != null)

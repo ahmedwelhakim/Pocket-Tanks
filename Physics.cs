@@ -70,22 +70,17 @@ namespace Game
         }
         public static void DrawFirePath_movingBalls(double angle, float ground_Y, Power power, Player player, Graphics g)
         {
-           
-            path_pts = new List<PointF>();
             circles = new List<RectangleF>();
-            dashed_pen = new Pen(Color.SandyBrown, 2.7f);
-            dashed_pen.DashStyle = DashStyle.Dot;
             float range_percent = 0.65f;
             if (angle > 0 && angle < 180 && power.getPower_Val() > 10)
             {
                 if (angle < 90)
-                {
-
+                {//Physics.Range return the last x in the range of path equation
                     float range = (float)Physics.Range(angle, power.getSpeedMagnitude() * range_percent, player) - (float)(player.X + player.Width / 2.0);
                     float actual_len;
                     float ratio;
                     float size;
-                    for (float i = (float)(player.X + player.Width / 2.0) + z_lw90; i <= (float)Physics.Range(angle, power.getSpeedMagnitude() * range_percent, player);)
+                    for (float i = (float)(player.X + player.Width / 2.0) + z_lw90; i <= (float)Physics.Range(angle, power.getSpeedMagnitude() * range_percent, player);  )
                     {
                         actual_len = (float)Physics.Range(angle, power.getSpeedMagnitude() * range_percent, player) - i;
                         ratio = actual_len / range;
@@ -139,8 +134,7 @@ namespace Game
                         }
 
                     }
-                    path_pts.Add(new PointF((float)(player.X + player.Width / 2.0), ground_Y - player.Height));
-                    path_pts.Add(new PointF((float)(player.X + player.Width / 2.0), ground_Y - player.Height - Physics.MaxHeight(angle, power.getSpeedMagnitude())));
+                    
                 }
                 if (circles.Count != 0)
                 {
